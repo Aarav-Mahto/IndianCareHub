@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th = "http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="robots" content="noindex">
+	
+	<meta name="_csrf" th:content="${_csrf.token}">
+	<meta name="_csrf_header" th:content="${_csrf.headerName}">
+	
+	<title>Insert title here</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/CSS/login.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/CSS/admin.css}">
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+</head>
+<body>
+<div id="container">
+	<th:block th:if="${view=='registerPage'}">
+	<div id="login_register">
+		<form class="register" onsubmit="return registerValidation()" th:object="${register}" action="/registerNow" method="post">
+			<h2>Register an Admin/Editor</h2>
+			<h5 id="show-error" style="text-align:center;color:red;"></h5>
+			<span><label>UserName : </label><input type="text" id="uniqueId" th:field="*{Unique_id}" placeholder="At least 5 characters" class="unique_id" value=""></span><br>
+			<span><label>Full Name : </label><input type="text" th:field="*{FullName}" placeholder="Your name" class="Fullname" value=""></span><br>
+			<span><label>Email Id : </label><input type="email" th:field="*{Email_id}" placeholder="email id" class="Emailid" value=""></span><br>
+			<span><label>Mobile No. : </label><input type="number" th:field="*{Phone}" placeholder="phone number" class="Mobile" value=""></span><br>
+			<span><label>Address : </label><input type="text" th:field="*{Address}" placeholder="belonging to city" class="Address" value=""></span><br>
+
+			<span>
+				<label for="user-type">User Type : </label>
+				<select class="user_type" th:field="*{User_Type}" id="user-type">
+				  <option value="choose" >Choose One</option>
+				  <option value="ADMIN" >Admin</option>
+				  <option value="USER" >Editor</option>
+				</select>
+			</span><br>
+
+			<span><label>Password : </label><input type="password" th:field="*{Password}" placeholder="password" class="Password"></span><br>
+			<span><label>Password : </label><input type="password" th:field="*{CPassword}" placeholder="Confirm password" class="C_password"></span><br>
+			<label class="hint">Password should be in: UPPERCASE(ABC), lowercase(abc),special character(@,!,#,$...etc), symbol, number (0-9).</label>
+			<br><button type="submit">Register</button><br><a href="/dashboard">Already Registered?</a>
+			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" hidden/>
+		</form>
+	</div>
+	<th:block>
+</div>
+<script type="text/javascript" th:src="@{/JS/admin_script.js}"></script>
+<script type="text/javascript" th:src="@{/JS/check_validation.js}"></script>
+</body>
+</html>

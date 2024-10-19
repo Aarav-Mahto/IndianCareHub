@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th = "http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="robots" content="noindex">
+	
+	<meta name="_csrf" th:content="${_csrf.token}">
+	<meta name="_csrf_header" th:content="${_csrf.headerName}">
+	
+	<title>Update Page</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/CSS/login.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/CSS/admin.css}">
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+   
+	<style>
+        .ui-dialog-titlebar {
+            background-color: #007bff;
+            color: white;
+            background-color: chocolate;
+            text-align: center;
+            padding:5px 0;
+        }
+        .ui-dialog-content {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            background-color: white;
+            color:black;
+            padding:5px;
+            transition:all 0.5s;
+        }
+        .ui-dialog-buttonset button {
+            background-color: transparent;
+            border:none;
+            outline: none;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 5px;
+            cursor: pointer;
+            float: right;
+        }
+        .ui-dialog .ui-dialog-buttonpane {
+		    width:40px;
+		    text-align: center;
+		    position: absolute;
+		    top: 0px; 
+		    right: 0;
+		}
+        .ui-dialog-titlebar-close {
+		    display: none;
+		}
+        .ui-dialog-buttonset button:hover {
+            background-color: red;
+            outline: none;
+        }
+        .inline-item {
+	        display: inline-block;
+	        margin-right: 10px; /* Adjust spacing as needed */
+	    }
+	    .inline-item:last-child {
+	        margin-right: 0; /* Remove margin for the last item */
+	    }
+    </style>
+</head>
+<body>
+
+<div id="Container">
+<div id="body">
+<div id="editor">
+	<th:block th:if="${view == 'showDB'}">
+		<div class="view-database">
+			<h2>Entries</h2>
+			<table>
+				<tr>
+					<th>Entries No</th>
+					<th>Org Name</th>
+					<th>Org Short Name</th>
+					<th>Org Other Name</th>
+					<th>Org Icon</th>
+					<th>About Org</th>
+					<th>Contacts</th>
+					<th>Org Address</th>
+					<th>Org Link</th>
+					<th>Entry Date</th>
+					<th>Enter By</th>
+					<th>Updated</th>
+					<th>Updated_by</th>
+				</tr>
+				<tr th:each="entry, stat : ${list}">
+	                <td th:text="${entry['Entry_no']}">1</td>
+	                <td th:text="${entry['Org_Full_Name']}">Org Name</td>
+	                <td th:text="${entry['Org_Short_Name']}">Org Short Name</td>
+	                <td th:text="${entry['Org_Other_Name']}">Org Other Name</td>
+	                <td th:text="${entry['Org_Icon']}">Org Icon</td>
+	                <td><button th:attr="data-entryno=${entry['Entry_no']}" onclick="showAbout(this.getAttribute('data-entryno'))">About Org</button></td>
+	                <td><button th:attr="data-entryno=${entry['Entry_no']}" onclick="showContacts(this.getAttribute('data-entryno'))">Show Contact</button></td>
+	                <td th:text="${entry['Address']}">Org Address</td>
+	                <td th:text="${entry['Web_Link']}">Org Link</td>
+	                <td th:text="${entry['Entry_Date']}">Entry Date</td>
+	                <td th:text="${entry['Entered_By']}">Enter By</td>
+	                <td th:text="${entry['Updated']}">Updated</td>
+	                <td th:text="${entry['Updated_by']}">Updated_by</td>
+	            </tr>
+			</table>				
+		</div>
+	</th:block>
+</div>
+</div>
+</div>
+<script type="text/javascript" th:src="@{/JS/admin_script.js}"></script>
+<script type="text/javascript" th:src="@{/JS/check_validation.js}"></script>
+</body>
+</html>

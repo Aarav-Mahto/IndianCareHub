@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th = "http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Error</title>
+<style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .error-container {
+            text-align: center;
+        }
+        .error-container h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .error-container p {
+            font-size: 1.2rem;
+            color: #666;
+        }
+        .error-container a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .error-container a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<div class="error-container">
+    <h1>Sorry 😓</h1>
+    <p>An error occurred while processing your request.</p>
+    <p><a href="/">Back to Home</a></p>
+</div>
+</body>
+</html>

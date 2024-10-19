@@ -1,0 +1,530 @@
+@charset "UTF-8";
+:root{
+    --h1-font:25px;
+    --h2-font:23px;
+    --h3-font:21px;
+    --h4-font:19px;
+    --h5-font:17px;
+    --normal-font:16px;
+    --small-font:14px;
+    --smaller-font:12px;
+    
+}
+@media screen and (max-width:500px){
+    :root{
+        --h1-font:28px;
+        --h2-font:26px;
+        --h3-font:24px;
+        --h4-font:22px;
+        --h5-font:20px;
+        --normal-font:18px;
+        --small-font:16px;
+        --smaller-font:13px;
+        
+    }
+}
+html{
+    scroll-behavior: smooth;
+}
+body{
+    margin: 0;
+    padding: 0;
+    transition: all 0.5s ease-out;
+    font-family: 'Ubuntu', sans-serif;
+    background-color: #0c192c;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+    font-size: var(--normal-font);
+}
+h1,h2,h3,h4,h5{
+    color:white;
+    text-align: center;
+}
+h1{
+    font-size: var(--h1-font);
+}
+h2{
+    font-size: var(--h2-font);
+}
+h3{
+    font-size: var(--h3-font);
+}
+h4{
+    font-size: var(--h4-font);
+}
+h5{
+    font-size: var(--h5-font);
+}
+#fixed-bg{
+    width:100%;
+    height: 100vh;
+    background-color: #0c192c;
+    position: fixed;
+    top:0;
+    left:0;
+    z-index: 0;
+    box-sizing: border-box;
+}
+.balls-container{
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+.balls{
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+}
+.balls span{
+    position: relative;
+    height: 25px;
+    width: 25px;
+    background-color: #4fc3dc;
+    margin:0 4px;
+    border-radius: 50%;
+    box-shadow: 0 0 0 10px #4fc3dc44,
+    0 0 50px #4fc3dc,
+    0 0 100px #4fc3dc;
+    animation: animate 15s linear infinite;
+    animation-duration: calc(125s / var(--i));
+}
+.balls span:nth-child(2n){
+    background-color: #ff2d75;
+    box-shadow: 0 0 0 10px #ff2d7544,
+    0 0 50px #ff2d75,
+    0 0 100px #ff2d75;
+}
+.balls span:nth-child(3n){
+    background-color: #6c07f0;
+    box-shadow: 0 0 0 10px #6c07f044,
+    0 0 50px #6c07f0,
+    0 0 100px #6c07f0;
+}
+@keyframes animate {
+    0%{
+        transform: translateY(100vh) scale(0,0);
+    }
+    100%{
+        transform: translateY(-10vh) scale(1,1);
+    }
+}
+
+#container{
+    position: relative;
+    z-index: 1;
+    scroll-behavior: smooth;
+}
+#header{
+    width: 100%;
+    height:50vh;
+    box-sizing: border-box;
+    z-index: 3;
+    box-shadow: 0 10px 20px 10px rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.8);
+    margin: 0 auto;
+
+}
+#logo-box{
+
+}
+#logo-box div{
+    height: 100px;
+    width:fit-content;
+    
+}
+#logo-box div img{
+    height: 100%;
+}
+/* @@@@@@@@@@@@@@@@@@    Search    @@@@@@@@@@@@@@@@@@@@@ */
+
+#search-box{
+    width:100%;
+    box-sizing: border-box;
+    padding: 20px 0;
+    position: absolute;
+    top:calc(65vh * 0.25);
+    color: black;
+    z-index: 2;
+    overflow: hidden;
+}
+.start-searching{
+    background-color: white;
+    max-height: 90vh;
+    position: fixed !important;
+    top: 0 !important;
+    box-shadow: 0px 0px 25px gray;
+    z-index: 1;
+}
+#search-div{
+    position: relative;
+    width: 300px;
+    margin: 0 auto;
+}
+#search-input{
+    /* width: 100%; */
+    width: calc(100% - (45px + 15px));
+    border-radius: 20px;
+    padding: 9px 45px 9px 15px;
+    outline: none;
+    border:1px solid white;
+    background-color: transparent;
+    font-size: var(--normal-font);
+    letter-spacing: 1px;
+    color:whitesmoke;
+    font-weight: 600;
+}
+#search-input::placeholder{
+    color:white;
+}
+.placeholder-gray::placeholder{
+    color:darkgray !important;
+}
+.placeholder-gray{
+    border:1px solid black !important;
+    color:#111 !important;
+}
+#search-input:focus{
+    transform: scale(1.05,1.05);
+}
+#search-icon{
+    font-size: 25px;
+    position: absolute;
+    right: 10px;
+    top:5px;
+    font-weight: bolder;
+    cursor: pointer;
+    background: linear-gradient(to right, #2e6acc, #1c7333,#fbbc05,#c82a1b); 
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+#close-icon{
+    position: absolute;
+    color:red;
+    z-index: 2;
+    right:0;
+    top:0;
+    cursor: pointer;
+    display: none;
+    font-size: 30px;
+}
+#close-icon1{
+    font-size: 25px;
+    position: absolute;
+    right: 10px;
+    top:6px;
+    font-weight: bolder;
+    color:red;
+    cursor: pointer;
+    display: none;
+}
+#search-slogan{
+    color:white;
+    max-width: 700px;
+    text-align: center;
+    margin: 20px auto;
+}
+#search-suggession{
+    width:100%;
+    max-height: 70vh;
+    margin: 0 auto 20px auto;
+    padding: 0 5px 20px 5px;
+    box-sizing: border-box;
+    display: none;
+    background-color: transparent;
+    position: relative;
+    z-index: 3;
+    overflow: auto;
+    transition: all 0.5s;
+}
+#search-suggession ul{
+    padding: 0;
+    margin: 0;
+    text-align: left;
+}
+#search-suggession ul li{
+    list-style-type: none;
+    border-bottom:1px solid darkgray;
+    margin-top: 8px;
+}
+#search-suggession ul li a{
+    text-decoration: none;
+    font-size: medium;
+    color:#4fc3dc;
+}
+#search-msg{
+    color:darkgray;
+    text-align: center;
+    margin-top: 20%;
+    display: none;
+}
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~  Loading  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+.loading-spinner {
+    margin: 0;
+    position: relative;
+    z-index:9999;
+    transition: all 1s ease-out;
+    display:none;
+}
+
+.loader {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    margin: 50px auto;
+}
+
+.ri-loader-fill{
+    display: block;
+    font-size: 40px;
+    animation: rotate 1.5s linear infinite;
+    background: linear-gradient(45deg, #1b6393, #dd0554);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+
+
+
+
+
+#page{
+    max-width: 700px;
+    padding: 0px 0px 10px 0px;
+    margin: 0 auto;
+    border-radius: 0;
+    scroll-behavior: smooth;
+}
+#page red{
+    color:red;
+}
+#page .cards{
+    width:95%;
+    margin:0px calc(5% / 2) 100px calc(5% / 2);
+    background:rgba(0, 0, 0, 0.8);
+    color:white;
+    padding:10px;
+    box-shadow: 0 0 15px 3px hotpink;
+    box-sizing: border-box;
+}
+#page .cards h3{
+    text-align: center;
+}
+#page .cards p{
+    text-align: justify;
+}
+#page .cards a{
+    color:#4fc3dc;
+    text-decoration: none;
+}
+.overview-card li{
+    margin:10px 0px;
+}
+#comments-box{
+    text-align: center;
+    margin:20px auto;
+    max-width: 700px;
+}
+#comments-box div{
+    width:fit-content;
+    height: fit-content;
+    margin:25px auto;
+    position: relative;
+}
+#comments-box h3{
+    color:white;
+    text-align: center;
+}
+#comments-box div input,
+#comments-box div textarea{
+    min-width:300px;
+    outline: none;
+    padding:10px 15px;
+    border-radius: 15px;
+    border:1px solid white;
+    background-color: transparent;
+    color: white;
+}
+#comments-box div label{
+    position: absolute;
+    pointer-events: none;
+    top:7px;
+    left:15px;
+    transition: all 0.3s ease;
+    color:whitesmoke;
+    letter-spacing: 1px;
+    font-size: var(--normal-font);
+}
+#comments-box button{
+    color:white;
+    background-color: transparent;
+    padding: 5px 10px;
+    margin: 0 auto;
+    border:1px solid gray;
+    cursor: pointer;
+    transition: all 0.5s ease;
+    white-space: nowrap;
+}
+#comments-box button:hover{
+    background-color: rgb(3, 73, 3);
+}
+#comments-box div input:focus ~ label,
+#comments-box div input:valid ~ label,
+#comments-box div textarea:focus ~ label,
+#comments-box div textarea:valid ~ label{
+    top:-20px;
+    color:white;
+    font-weight: 500;
+}
+#sending{
+    font-size: var(--small-font) !important;
+}
+
+
+
+body::-webkit-scrollbar{
+    width: 0.6em;
+}
+body::-webkit-scrollbar-track{
+    background-color: #033743;
+}
+body::-webkit-scrollbar-thumb{
+    background-image: linear-gradient(180deg, #57D5F2, #C61E05);
+    border-radius: 20px;
+}
+
+#dmca-container{
+	color: white;
+	margin-top: 15px;
+	font-size: 11px;
+	width: 100%;
+	text-align: center;
+}
+#footer{
+	width: 100%;
+	min-height: 10vh;
+	border: 1px solid black;
+	background: #161616;
+	position: relative;
+	padding: 10px;
+	box-sizing: border-box;
+}
+#footer #social-links ul{
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	font-size: 16px;
+	flex-wrap:wrap;
+}
+#footer #social-links ul li{
+	padding: 5px 5px 20px 5px;
+	height: 23px;
+	text-align: center;
+    list-style-type: none;
+}
+#footer #social-links ul li a{
+	color: white;
+    text-decoration: none;
+}
+
+
+
+
+
+
+/*<link rel="stylesheet" type="text/css" th:href="@{/CSS/more_styling.css}">========================================================================================*/
+/*Scroll to Top Button    =============================================================*/
+#scroll-to-top {
+    position: fixed;
+    bottom: 150px;
+    right: 5px;
+    width: 40px;
+    height: 40px;
+    background-color: #000;
+    color: #fff;
+    border-radius: 50%;
+    cursor: pointer;
+    display: none;
+    transition: opacity 0.3s ease-in-out;
+    z-index: 999;
+}
+
+#scroll-to-top div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+#scroll-to-top div a{
+    color:white;
+}
+
+.ri-arrow-up-line {
+    font-family: 'Material Icons Outlined';
+    font-size: 24px;
+}
+
+
+/* ~~~~~~~~~~~~~~~ Cookies --------------------- */
+#cookies-box{
+    max-width:700px;
+    margin: 0 10px;
+    box-sizing: border-box;
+    box-shadow: 0 0px 500px 50px #000;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+    position: fixed;
+    bottom: 3%;
+    right: 3%;
+    /* left: 50%; */
+    /* transform: translateX(-50%); */
+    background-color: white;
+    padding: 10px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    display: none;
+    z-index: 999;
+}
+#cookies-box h3{
+    color:#222;
+}
+#cookies-box div p{
+    margin: 0;
+    color:#333;
+}
+#cookies-box .btn-cookies{
+    text-align: right;
+}
+#cookies-box .btn-cookies button{
+    border:none;
+    margin-right: 5%;
+    color: white;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+#accept-cookies{
+    color: rgba(0, 100, 0, 1) !important;
+}
+#reject-cookies{
+    color: rgba(139, 0, 0, 1) !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

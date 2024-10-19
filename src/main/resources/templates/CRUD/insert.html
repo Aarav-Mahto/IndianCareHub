@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th = "http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="robots" content="noindex">
+	
+	<meta name="_csrf" th:content="${_csrf.token}">
+	<meta name="_csrf_header" th:content="${_csrf.headerName}">
+	
+	<title>Insert Page</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/CSS/login.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/CSS/admin.css}">
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body>
+<div id="Container">
+<div id="body">
+<div id="editor">
+	<form class="form" onsubmit="return insertValidation(event)" th:action="@{/insertData}" method="POST" enctype="multipart/form-data">
+		<h2>Entry</h2>
+		<h5 id="show-error" style="text-align:center; color:red;"></h5>
+		<h5 style="text-align:center; color:red;" th:text="${session.insertSuccess}"></h5>
+		<h5 style="text-align:center; color:red;" th:text="${session.insertError}"></h5>
+		<div><label>Organization's Full Name : </label><br><input type="text" name="org_full_name" placeholder="Eg. Harcourt Butler Technical University" value=""></div>
+		<div><label>Organization's Short Name : </label><br><input type="text" name="org_alias_name" placeholder="Eg. HBTU" value=""></div>
+		<div><label>Organization's Other Name : </label><br><input type="text" name="org_title" placeholder="Eg. HBTI" value=""></div>
+		
+		<div><label>Organization logo : </label><br><input type="file" name="org_logo" placeholder="Upload a logo" value=""></div>
+		
+		<div><label>About Company : </label><br><textarea name="About_Company" placeholder="Write Something..."></textarea> </div>
+		<div><label>Buisness Address : </label><br><input type="text" name="org_address" placeholder="address..." value=""> </div>
+		<div><label>Official Website Link : </label><br><input type="text" name="Web_Link" placeholder="https://www.indiancarehub.com" value=""></div>
+	
+		<div class="contact-no" id="contact-no">
+			<div class="name_number">
+				<div><label>Department Name: </label><br><input type="text" name="Department_Name" placeholder="General Enquiry" value=""></div>
+				<div><label>Phone or Email : </label><br><input type="text" name="PhoneEmail" placeholder="0123456789"></div>
+			</div>
+		
+		<li class="add-more" onclick="add_more(event)"><span class="material-symbols-outlined">add</span></li>
+		<li class="remove-more" onclick="remove_more(event)"><span class="material-symbols-outlined">cancel</span></li>
+		</div>
+		<div class="ul-portion"><button type="submit" class="submit" name="btn" value="submit_new_entry">Submit</button></div><hr>	
+	</form>
+</div>
+</div>
+</div>
+<script type="text/javascript" th:src="@{/JS/admin_script.js}"></script>
+<script type="text/javascript" th:src="@{/JS/check_validation.js}"></script>
+</body>
+</html>

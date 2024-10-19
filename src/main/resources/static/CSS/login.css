@@ -1,0 +1,163 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+body{
+	margin: 0;
+	padding: 0;
+	font-family: 'Poppins', sans-serif;
+	background: #161616;
+	color: white;
+	font-size: 14px;
+}
+*{
+	box-sizing: border-box;
+	transition: all 0.5s;
+	scroll-behavior: smooth;
+}
+#logout{
+	padding: 5px 10px;
+	cursor: pointer;
+	position: absolute;
+	right: 1%;
+	top: 1%;
+	border-radius: 15px;
+	border: none;
+	font-weight: 600;
+	background: red;
+	color: black;
+}
+.login, .register, .email-verify, .generate-password, .choose-exam,.delete{
+	background: #fff;
+	color: black;
+	min-width: 20%;
+	max-width: 70%;
+	margin: 20vh auto;
+	padding: 1% 3%;
+	text-align: center;
+}
+.login h2, .register h2,.delete h2{
+	text-align: center;
+	line-height: 0;
+	margin-bottom: 50px;
+}
+.login button, .register button,.email-verify button, .generate-password button, .choose-exam button,.delete button{
+	margin: 10px auto;
+	text-align: center;
+	border: 1px solid gray;
+	list-style-type: none;
+	background: green;
+	cursor: pointer;
+	width: 170px;
+	padding: 5px;
+	border-radius: 5px;
+	color: white;
+}
+.login button:hover, .register button:hover,.email-verify button:hover, .generate-password button:hover, .choose-exam button:hover, .delete button:hover{
+	background: darkgreen;
+}
+.login{
+
+}
+.register{
+
+}
+.choose-exam #register-admin,#delete-admin{
+	width: 250px;
+}
+.choose-exam select{
+	margin: 0;
+	padding: 5px 15px;
+	display: block;
+	margin: 0 auto;
+}
+.choose-exam select option{
+	font-size: 10px;
+	margin: 0;
+	padding: 0;
+}
+span{
+	display: block;
+	/*margin-bottom: -10px;*/
+}
+span input{
+	padding: 2px 7px;
+}
+.hint{
+	font-size: 10px;
+	color: red;
+	margin-left: 50px;
+}
+.delete span label::after{
+	content: '';
+}
+
+/*Scroll Top to Button    =============================================================*/
+#scroll-to-top {
+    position: fixed;
+    bottom: 150px;
+    right: 5px;
+    width: 30px;
+    height: 30px;
+    background-color: #444;
+    color: #fff;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: opacity 0.3s ease-in-out;
+    z-index: 999;
+}
+
+#scroll-to-top div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+#scroll-to-top div a{
+    color:white;
+}
+.down-up {
+    font-family: 'Material Icons Outlined';
+    font-size: 18px !important;
+}
+/*Scroll Button to Top    =============================================================*/
+#scroll-to-bottom {
+    position: fixed;
+    bottom: 150px;
+    right: 35px;
+    width: 30px;
+    height: 30px;
+    background-color: #444;
+    color: #fff;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: opacity 0.3s ease-in-out;
+    z-index: 999;
+}
+
+#scroll-to-bottom div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+#scroll-to-bottom div a{
+    color:white;
+}
+
+
+
+
+
+
+
+
+@media only screen and (max-width: 650px){
+	.login, .register, .email-verify, .generate-password,.choose-exam,.delete{
+		background: #fff;
+		color: black;
+		min-width: 20%;
+		max-width: 95%;
+		margin: 20vh auto;
+		padding: 1% 1%;
+	}
+}

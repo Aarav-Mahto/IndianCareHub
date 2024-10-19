@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="robots" content="noindex">
+
+	<meta name="_csrf" th:content="${_csrf.token}">
+	<meta name="_csrf_header" th:content="${_csrf.headerName}">
+
+	<title>dashboard</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/CSS/login.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/CSS/admin.css}">
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+	<link rel="stylesheet"
+		href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<style type="text/css">
+		h5 {
+			margin: 0;
+			padding: 0;
+		}
+	</style>
+
+</head>
+
+<body>
+	<div>
+		<h3 style="text-align:center;color: #014B5A;">Admin Panel : <span th:text="${session.fullName}"></span></h3>
+	</div>
+	<a id="logout" href="/logout">Logout</a>
+	<div id="countdown">Session expires in: <span id="time">00:00</span></div>
+	<!--============================================== This is Admin Page =========================================================-->
+	<div id="Container">
+		<div id="body">
+			<div id="editor">
+				<div class="ul-portion">
+					<button onclick="btnNavigate('insert')" value="new_entry">New Entry</button>
+					<button onclick="btnNavigate('update')" value="update_entry">Update Entry</button>
+					<button onclick="btnNavigate('delete_entry')" value="delete_entry" disabled>Delete Entry</button>
+					<button onclick="btnNavigate('showDB')" value="view_database">View Database</button>
+					<button onclick="btnNavigate('register')" value="register">Register</button>
+					<button onclick="btnNavigate('seo_heading')" value="seo_heading">SEO Heading</button>
+				</div>
+				<hr><br>
+			</div>
+			<th:block th:if="${view=='insertion'}">
+				<form class="form" onsubmit="return insertValidation(event)" th:action="@{/insertData}" method="POST"
+					enctype="multipart/form-data">
+					<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" hidden />
+					<h2>Entry</h2>
+					<h5 th:style="'text-align:center;color:' + ${session.color}" th:text="${session.msg}"></h5>
+					<h5 id="show-error" style="text-align:center; color:red;"></h5>
+					<div class="input-group">
+						<select name="industryName" class="industryName" required>
+							<option value="" selected disabled>Industry</option>
+							<option th:each="industryName : ${industry}" th:value="${industryName}"
+								th:text="${industryName}">
+						</select>
+						<div id="pageUrl" class="pageUrl">
+							<input type="text" name="pageUrl" required>
+							<label id="urlError">Page_Url</label>
+						</div>
+					</div>
+					<div><input type="text" name="org_full_name" placeholder="Organization's Full Name" required></div>
+					<div><input type="text" name="org_alias_name" placeholder="Organization's Short Name" required>
+					</div>
+					<!-- <div><input type="text" name="org_title" placeholder="Organization's Other Name" value=""></div> -->
+					<div><input type="text" name="page_title" placeholder="Page Title" required></div>
+
+					<div><input type="file" name="org_logo" placeholder="Upload a logo" required></div>
+
+					<div><textarea name="About_Company" placeholder="About Company" required></textarea> </div>
+					<div><input type="text" name="org_address" placeholder="Buisness Address" required> </div>
+					<div><input type="text" name="Web_Link" placeholder="Official Website Link" required></div>
+
+					<div class="social-media" id="social-media">
+						<div class="social-btn">
+							<select name="socialMediaName">
+								<option value="" selected disabled>Social Links</option>
+								<option value="faq">FAQs</option>
+								<option value="whatsapp">Whatsapp</option>
+								<option value="facebook">Facebook</option>
+								<option value="instagram">Instagram</option>
+								<option value="twitter">Twitter</option>
+								<option value="youtube">Youtube</option>
+								<option value="linkedin">Linkedin</option>
+								<option value="threads">Threads</option>
+								<option value="telegram">Telegram</option>
+							</select>
+							<input type="text" name="socialMediaLinks" placeholder="Paste Link Here">
+						</div>
+						<li class="add" id="socialBtn-add" onclick="add_link(event)">Add More</li>
+						<li class="remove" id="socialBtn-remove" onclick="remove_link(event)">Remove Last</li>
+					</div>
+					<div class="Add-AnchorLinks">
+						<!-- <div class="AnchorLinks-box">
+					<div><input type="text" name="anchorName" placeholder="Link Name"></div>
+					<div><input type="text" name="anchorLink" placeholder="Link"></div>
+				</div> -->
+						<strong class="a-info">Add Links</strong>
+						<li class="add-a" id="add-a">Add</li>
+						<li class="remove-a" id="remove-a">Remove</li>
+					</div>
+					<div id="QA" class="QA">
+						<!-- <div class="QA-box">
+					<div><input type="text" name="question" class="question" placeholder="Question?"></div>
+					<div><textarea name="answer" class="answer" placeholder="Answer?" cols="15" rows="2"></textarea></div>
+				</div> -->
+						<strong class="qa-info">Add Questions And Answers</strong>
+						<li class="add-qa" id="add-qa">Add</li>
+						<li class="remove-qa" id="remove-qa">Remove</li>
+					</div>
+					<div class="contact-no" id="contact-no">
+						<div class="name_number">
+							<div><input type="text" name="Department_Name" placeholder="Department Name" value=""></div>
+							<div><input type="text" name="PhoneEmail" placeholder="0123456789"></div>
+						</div>
+
+						<li class="add-more" onclick="add_more(event)">Add</li>
+						<li class="remove-more" onclick="remove_more(event)">Remove</li>
+					</div>
+					<div class="ul-portion"><button type="submit" class="submit" name="btn"
+							value="submit_new_entry">Submit</button></div>
+					<hr>
+				</form>
+			</th:block>
+
+
+
+			<th:block th:if="${view=='searchForUpdate'}">
+				<form class="form" th:action="@{/updateFound_Post}" method="POST"
+					onsubmit="return searchForUpdate(event);">
+					<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" hidden />
+					<h2>Update</h2>
+					<h5 th:style="'text-align:center;color:' + ${session.color}" th:text="${session.msg}"></h5>
+					<h5 id="search-msg" style="text-align:center;"> </h5>
+					<div><label>Entery Number : </label><br><input type="number" name="searchId" class="search_id"
+							placeholder="Ex. 101"></div>
+					<div class="ul-portion"><button type="submit" class="submit">Search</button></div>
+				</form>
+			</th:block>
+			<th:block th:if="${view == 'updateFound'}">
+				<form class="form" onsubmit="return updateValidation(event)" th:action="@{/updateFoundUpdateNow}"
+					method="POST" enctype="multipart/form-data">
+					<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" hidden />
+					<h2>Modify Data</h2>
+					<h5 th:style="'text-align:center;color:' + ${session.color}" th:text="${session.msg}"></h5>
+					<h5 id="show-error" style="text-align:center; color:red;"></h5>
+					<input type="number" name="Entry_no" th:value="${allDetails['searchId']}" hidden>
+					<div class="input-group">
+						<select name="industryName" class="industryName" required>
+							<option th:value="${allDetails['industryName']}" th:text="${allDetails['industryName']}"
+								selected></option>
+							<option th:each="industryName : ${industry}" th:value="${industryName}"
+								th:text="${industryName}">
+						</select>
+						<div class="pageUrl">
+							<input type="text" name="pageUrl" th:value="${allDetails['pageUrl']}" required>
+							<label id="urlError" class="urlError">Page_Url</label>
+						</div>
+					</div>
+					<div><label>Organization's Full Name : </label><br><input type="text" name="update_org_name"
+							placeholder="buisness name..." th:value="${allDetails['orgName']}"></div>
+					<div><label>Organization's Short Name : </label><br><input type="text" name="update_org_alias"
+							placeholder="buisness title..." th:value="${allDetails['sortName']}"></div>
+					<div><label>Page Title : </label><br><input type="text" name="update_pageTitle"
+							placeholder="Page title" th:value="${allDetails['pageTitle']}"></div>
+
+					<div>
+						<span th:text="${allDetails['org_old_logo']}" style="font-size: 9px;"></span>
+						<input name="orgLogoName" type="text" th:value="${allDetails['org_old_logo']}" hidden/>
+						<img alt="" th:src="@{${allDetails['orgLogo']}}" height=60 width=60 style="float: left;">
+						<input type="file" name="update_org_logo" placeholder="Update logo" style="width: 300px; margin-left: 15px;">
+					</div>
+
+					<div style="margin-top: 15px;"><label>About Company : </label><br><textarea name="update_About_Company"
+							placeholder="Something about company" th:text="${allDetails['orgAbout']}"></textarea> </div>
+					<div><label>Buisness Address : </label><br><textarea name="update_org_address"
+							placeholder="address..." th:text="${allDetails['orgAddress']}"></textarea> </div>
+
+					<!-- <div><label>Seo Keywords : </label><br><textarea name="update_org_key" placeholder="address..." th:text="${allDetails['SeoKeywords']}"></textarea> </div>
+				<div><label>Seo Description : </label><br><textarea name="update_org_desc" placeholder="address..." th:text="${allDetails['pageDesc']}"></textarea> </div>
+				 -->
+
+					<div><label>Official Website Link : </label><br><input type="text" name="update_Web_Link"
+							placeholder="https://www.indiancarehub.com" th:value="${allDetails['orgWebsite']}"></div>
+
+					<div class="social-media update-social" id="social-media">
+						<strong class="social-info" style="font-size: 10px;">Add Social Media</strong>
+						<div class="social-btn" th:each="socialLink : ${socialLinksForUpdate}">
+							<input type="text" name="socialSno" th:value="${socialLink.value[0]}" hidden/>
+							<input type="text" name="socialCompanyId" th:value="${socialLink.value[1]}" hidden/>
+							<select name="socialMediaName" style="text-transform: capitalize;">
+								<option th:value="${socialLink.value[2]}" th:text="${socialLink.value[2]}" selected>Social Links</option>
+								<option value="faq">FAQs</option>
+								<option value="whatsapp">Whatsapp</option>
+								<option value="facebook">Facebook</option>
+								<option value="instagram">Instagram</option>
+								<option value="twitter">Twitter</option>
+								<option value="youtube">Youtube</option>
+								<option value="linkedin">Linkedin</option>
+								<option value="threads">Threads</option>
+								<option value="telegram">Telegram</option>
+							</select>
+							<input type="text" name="socialMediaLinks" th:value="${socialLink.value[3]}">
+						</div>
+						<li class="add" id="socialBtn-add" onclick="add_link(event)">Add More</li>
+						<li class="remove" id="socialBtn-remove" onclick="remove_link(event)">Remove Last</li>
+					</div>
+					<div class="Add-AnchorLinks">
+						<strong class="social-info" style="font-size: 10px;">Add Links</strong>
+						<div class="AnchorLinks-box" th:each="anchorLink : ${anchorLink}">
+							<div><input type="text" name="anchorSno" th:value="${anchorLink.value[0]}" hidden></div>
+							<div><input type="text" Name="anchorCompanyId" th:value="${anchorLink.value[1]}" hidden></div>
+							<div><input type="text" name="anchorName" th:value="${anchorLink.value[3]}"></div>
+							<div><input type="text" name="anchorLink" th:value="${anchorLink.value[4]}"></div>
+						</div>
+						<li class="add-a" id="add-a-update">Add</li>
+						<li class="remove-a" id="remove-a-update">Remove</li>
+					</div>
+					<div class="QA">
+						<strong class="social-info" style="font-size: 10px;">Add Questions And Answers</strong>
+						<div class="QA-box" th:each="questionAns : ${questionAns}">
+							<div><input type="text" name="qaSno" th:value="${questionAns.value[0]}" hidden></div>
+							<div><input type="text" Name="qaCompanyId" th:value="${questionAns.value[1]}" hidden></div>
+							<div><input type="text" name="question" th:value="${questionAns.value[3]}"></div>
+							<div><textarea name="answer" placeholder="Answer?" cols="15" rows="2"
+									th:utext="${questionAns.value[4]}"></textarea></div>
+						</div>
+						<li class="add-qa" id="add-qa-update">Add</li>
+						<li class="remove-qa" id="remove-qa-update">Remove</li>
+					</div>
+
+					<div class="contact-no" id="contact-no">
+						<strong class="social-info" style="font-size: 10px;">Contact Details</strong>
+						<div class="name_number" th:each="deptEntry : ${dept_num}">
+							<input type="number" name="record_no" th:value="${deptEntry.value[0]}" hidden>
+							<input type="number" name="company_id" th:value="${deptEntry.value[1]}" hidden>
+							<div><input type="text" name="Department_Name" placeholder="General Enquiry"
+									th:value="${deptEntry.value[2]}"></div>
+							<div><input type="text" name="PhoneEmail" placeholder="0123456789"
+									th:value="${deptEntry.value[3]}"></div>
+						</div>
+					</div>
+					<div class="more-update">
+						<li id="add-more-update" class="add-more">Add</li>
+						<li id="remove-more-update" class="remove-more">Remove</li>
+					</div>
+
+					<div class="ul-portion"><button type="submit" class="submit" name="btn"
+							value="submit_update_entry">Update</button></div>
+					<hr>
+				</form>
+			</th:block>
+
+
+			<th:block th:if="${view=='searchForDelete'}">
+				<form class="form" th:action="@{/deleteFound_Post}" method="POST"
+					onsubmit="return searchForDelete(event);">
+					<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" hidden />
+					<h2>Delete</h2>
+					<h5 th:style="'text-align:center;color:' + ${session.color}" th:text="${session.msg}"></h5>
+					<div><label>Entery Number : </label><br><input type="number" name="deleteId" class="search_id"
+							placeholder="Ex. 101"></div>
+					<div class="ul-portion"><button type="submit" class="submit">Search</button></div>
+				</form>
+			</th:block>
+			<th:block th:if="${view == 'deleteFound'}">
+				<form class="form" th:action="@{/deleteFoundDeleteNow}" method="POST" enctype="multipart/form-data">
+					<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" hidden />
+					<h2>Delete Data</h2>
+					<h5 th:style="'text-align:center;color:' + ${session.color}" th:text="${session.msg}"></h5>
+					<h5 id="show-error" style="text-align:center; color:red;"></h5>
+					<input type="number" name="Entry_no" th:value="${allDetails['searchId']}" hidden>
+					<input type="text" name="imageName" th:value="${allDetails['org_old_logo']}" hidden>
+					<div><label>Organization's Full Name : </label><br><input type="text" name="update_org_name"
+							placeholder="buisness name..." th:value="${allDetails['orgName']}"></div>
+					<div><label>Organization's Short Name : </label><br><input type="text" name="update_org_alias"
+							placeholder="buisness title..." th:value="${allDetails['sortName']}"></div>
+					<div><label>Organization's Other Name : </label><br><input type="text" name="update_org_title"
+							placeholder="buisness title..." th:value="${allDetails['otherName']}"></div>
+					<div><label>Buisness Address : </label><br><textarea name="update_org_address"
+							placeholder="address..." th:text="${allDetails['orgAddress']}"></textarea> </div>
+					<div><label>Official Website Link : </label><br><input type="text" name="update_Web_Link"
+							placeholder="https://www.indiancarehub.com" th:value="${allDetails['orgWebsite']}"></div>
+
+					<div class="ul-portion"><button type="submit" class="submit" name="btn"
+							value="submit_update_entry">Delete</button></div>
+					<hr>
+				</form>
+			</th:block>
+			<th:block th:if="${view == 'showDB'}">
+				<div id="scroll-to-bottom">
+					<div><span class="material-symbols-outlined down-up">arrow_downward</span></div>
+				</div>
+				<div id="scroll-to-top">
+					<div><span class="material-symbols-outlined down-up">arrow_upward</span></div>
+				</div>
+				<h2 style="color:white;">All Entries</h2>
+				<div class="view-database">
+					<table>
+						<tr>
+							<th>Entries No</th>
+							<th>Org Name</th>
+							<th>Org Short Name</th>
+							<th>Org Other Name</th>
+							<th>Org Icon</th>
+							<th>About Org</th>
+							<th>Contacts</th>
+							<th>Org Address</th>
+							<th>Org Link</th>
+							<th>Entry Date</th>
+							<th>Enter By</th>
+							<th>Updated</th>
+							<th>Updated_by</th>
+						</tr>
+						<tr th:each="entry, stat : ${list}">
+							<td th:text="${entry['Entry_no']}">1</td>
+							<td th:text="${entry['Org_Full_Name']}">Org Name</td>
+							<td th:text="${entry['Org_Short_Name']}">Org Short Name</td>
+							<td th:text="${entry['Org_Other_Name']}">Org Other Name</td>
+							<td th:text="${entry['Org_Icon']}">Org Icon</td>
+							<td><button th:attr="data-entryno=${entry['Entry_no']}"
+									onclick="showAbout(this.getAttribute('data-entryno'))">About Org</button></td>
+							<td><button th:attr="data-entryno=${entry['Entry_no']}"
+									onclick="showContacts(this.getAttribute('data-entryno'))">Show Contact</button></td>
+							<td th:text="${entry['Address']}">Org Address</td>
+							<td th:text="${entry['Web_Link']}">Org Link</td>
+							<td th:text="${entry['Entry_Date']}">Entry Date</td>
+							<td th:text="${entry['Entered_By']}">Enter By</td>
+							<td th:text="${entry['Updated']}">Updated</td>
+							<td th:text="${entry['Updated_by']}">Updated_by</td>
+						</tr>
+					</table>
+				</div>
+			</th:block>
+			<!-- ===============================Seo Keywords================================================ -->
+			<th:block th:if="${view=='seo_heading'}">
+				<form class="form" method="POST" action="/insertSeoHeading">
+					<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" hidden />
+					<div id="meta-key-box">
+						<h2>Meta Keywords</h2>
+						<h5 th:style="'text-align:center;color:' + ${session.color}" th:text="${session.msg}"></h5>
+						<h5 id="show-error" style="text-align:center; color:red;"></h5>
+						<select id="industry_select" name="Selected_Industry" class="country_select"
+							style="padding:5px 4px;background-color: blueviolet;color:white;" required>
+							<option value="" selected>Select Industry</option>
+						</select>
+						<div><input type="text" name="heading1" placeholder="Heading 1" value=""></div>
+						<div><input type="text" name="heading2" placeholder="Heading 2" value=""></div>
+						<div><input type="text" name="heading3" placeholder="Heading 3" value=""></div>
+						<div><input type="text" name="heading4" placeholder="Heading 4" value=""></div>
+					</div>
+					<!-- <li class="add-more" onclick="add_meta_box(event)"><span class="material-symbols-outlined">add</span></li>
+				<li class="remove-more" onclick="remove_meta_box(event)"><span class="material-symbols-outlined">cancel</span></li> -->
+					<div class="ul-portion"><button type="submit" class="submit" name="btn"
+							value="submit_new_entry">Submit</button></div>
+					<hr>
+				</form>
+			</th:block>
+		</div>
+		<!-- ======================================================================================================================================== -->
+		<!-- ======================================================================================================================================== -->
+		<th:block th:if="${view=='registerPage'}">
+			<div id="login_register">
+				<form class="register" onsubmit="return registerValidation()" th:object="${register}"
+					action="/registerNow" method="post">
+					<h2>Register an Admin/Editor</h2>
+					<h5 th:style="'text-align:center;color:' + ${session.color}" th:text="${session.msg}"></h5>
+					<h5 id="show-error" style="text-align:center;color:red;"></h5>
+					<span><label>UserName : </label><input type="text" id="uniqueId" th:field="*{Unique_id}"
+							placeholder="At least 5 characters" class="unique_id" value=""></span><br>
+					<span><label>Full Name : </label><input type="text" th:field="*{FullName}" placeholder="Your name"
+							class="Fullname" value=""></span><br>
+					<span><label>Email Id : </label><input type="email" th:field="*{Email_id}" placeholder="email id"
+							class="Emailid" value=""></span><br>
+					<span><label>Mobile No. : </label><input type="number" th:field="*{Phone}"
+							placeholder="phone number" class="Mobile" value=""></span><br>
+					<span><label>Address : </label><input type="text" th:field="*{Address}"
+							placeholder="belonging to city" class="Address" value=""></span><br>
+
+					<span>
+						<label for="user-type">User Type : </label>
+						<select class="user_type" th:field="*{User_Type}" id="user-type">
+							<option value="choose">Choose One</option>
+							<option value="ADMIN">Admin</option>
+							<option value="USER">Editor</option>
+						</select>
+					</span><br>
+
+					<span><label>Password : </label><input type="password" th:field="*{Password}" placeholder="password"
+							class="Password"></span><br>
+					<span><label>Password : </label><input type="password" th:field="*{CPassword}"
+							placeholder="Confirm password" class="C_password"></span><br>
+					<label class="hint">Password should be in: UPPERCASE(ABC), lowercase(abc),special
+						character(@,!,#,$...etc), symbol, number (0-9).</label>
+					<br><button type="submit">Register</button><br><a href="/login">Already Registered?</a>
+					<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" hidden />
+				</form>
+			</div>
+			<th:block>
+	</div>
+
+	<!-- This is End Of Admin Page =========================================================================================-->
+	<script type="text/javascript" th:src="@{/JS/admin_script.js}"></script>
+	<script type="text/javascript" th:src="@{/JS/check_validation.js}"></script>
+</body>
+
+</html>

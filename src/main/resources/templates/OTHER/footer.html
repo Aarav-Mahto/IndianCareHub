@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th = "http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+	<style type="text/css">
+		@import url('https://fonts.googleapis.com/css2?family=Work+Sans&display=swap');
+
+		*{
+			transition: all 0.3s;
+			font-family: 'Work Sans', sans-serif;
+		}
+		h1{
+			font-size: 25px;
+		}
+		body{
+			margin: 0;
+			padding: 0;
+		}
+		li{
+			list-style: none;
+		}
+		a{
+			text-decoration: none;
+		}
+		#nm{
+			color: white;
+			margin-top: 15px;
+			font-size: 11px;
+			width: 100%;
+			text-align: center;
+		}
+		#footer{
+			width: 100%;
+			min-height: 10vh;
+			border: 1px solid black;
+			background: #161616;
+			position: relative;
+			padding: 10px;
+			box-sizing: border-box;
+		}
+		#footer #social-links ul{
+			margin: 0;
+			padding: 0;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-around;
+			font-size: 16px;
+			flex-wrap:wrap;
+		}
+		#footer #social-links ul li{
+			padding: 5px 5px 20px 5px;
+			height: 23px;
+			text-align: center;
+		}
+		#footer #social-links ul li a{
+			color: white;
+		}
+	</style>
+</head>
+<body>
+<form>
+	<div id="footer">
+		<div id="social-links">
+			<ul>
+				<li><a href="/terms">Terms & Conditions</a> </li>
+				<li><a href="/hyperlink_policy">Hyperlink Policy</a> </li>
+				<li><a href="/privacy_policy">Privacy Policy</a> </li>
+				<li><a href="/disclimer">Disclimer</a> </li>
+			</ul>
+		</div>
+		<div id="nm"><a href="//www.dmca.com/Protection/Status.aspx?ID=2fa696c2-3093-4f4e-a7e7-e3907994ab34" title="DMCA.com Protection Status" class="dmca-badge"> <img src ="https://images.dmca.com/Badges/dmca-badge-w150-5x1-02.png?ID=2fa696c2-3093-4f4e-a7e7-e3907994ab34"  alt="DMCA.com Protection Status" /></a>  <script src="https://images.dmca.com/Badges/DMCABadgeHelper.min.js"> </script></div>
+	</div>
+</form>
+</body>
+</html>

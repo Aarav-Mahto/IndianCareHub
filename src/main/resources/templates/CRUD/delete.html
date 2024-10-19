@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th = "http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="robots" content="noindex">
+	
+	<meta name="_csrf" th:content="${_csrf.token}">
+	<meta name="_csrf_header" th:content="${_csrf.headerName}">
+	
+	<title>Update Page</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/CSS/login.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/CSS/admin.css}">
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body>
+<div id="Container">
+<div id="body">
+<div id="editor">
+	<th:block th:if="${view=='searchForDelete'}">
+		<form class="form" th:action="@{/deleteFound_Post}" method="POST" onsubmit="return searchForDelete(event);">
+			<h2>Delete</h2>
+			<h5 id="delete-msg" style="text-align:center;"> </h5>
+			<div><label>Entery Number : </label><br><input type="number" name="deleteId" class="search_id" placeholder="Ex. 101"></div>
+			<div class="ul-portion"><button type="submit" class="submit">Search</button></div>
+		</form>
+	</th:block>
+	<th:block th:if="${view == 'deleteFound'}">
+		<form class="form" th:action="@{/deleteFoundDeleteNow}" method="POST" enctype="multipart/form-data">
+			<h2>Delete Data</h2>
+			<h5 id="show-error" style="text-align:center; color:red;"></h5>
+			<input type="number" name="Entry_no" th:value="${allDetails['searchId']}" hidden>
+			<input type="text" name="imageName" th:value="${allDetails['org_old_logo']}" hidden>
+			<div><label>Organization's Full Name : </label><br><input type="text" name="update_org_name" placeholder="buisness name..." th:value="${allDetails['orgName']}"></div>
+			<div><label>Organization's Short Name : </label><br><input type="text" name="update_org_alias" placeholder="buisness title..." th:value="${allDetails['sortName']}"></div>
+			<div><label>Organization's Other Name : </label><br><input type="text" name="update_org_title" placeholder="buisness title..." th:value="${allDetails['otherName']}"></div>
+			<div><label>Buisness Address : </label><br><textarea name="update_org_address" placeholder="address..." th:text="${allDetails['orgAddress']}"></textarea> </div>
+			<div><label>Official Website Link : </label><br><input type="text" name="update_Web_Link" placeholder="https://www.indiancarehub.com" th:value="${allDetails['orgWebsite']}"></div>
+			
+			<div class="ul-portion"><button type="submit" class="submit" name="btn" value="submit_update_entry">Delete</button></div><hr>
+		</form>
+	</th:block>
+</div>
+</div>
+</div>
+<script type="text/javascript" th:src="@{/JS/admin_script.js}"></script>
+<script type="text/javascript" th:src="@{/JS/check_validation.js}"></script>
+</body>
+</html>
