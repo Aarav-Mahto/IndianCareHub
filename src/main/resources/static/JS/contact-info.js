@@ -305,7 +305,7 @@ function cmdLineCopy(copyIt) {
 /* ~~~~~~~~~~~~~~~~~~~~~~ JSON-LD Formater~~~~~~~~~~~~~~~~~ */
 async function jsonLD() {
     var type = $('#type-jsonLD').text().trim().toLowerCase();
-    var type_secondry = (type === 'person') ? "Person" : "Organization";
+    var type_secondry = (type === 'person' || type === 'stand_alone') ? "Person" : "Organization";
 
     const countryName = "India";
     const language = ['English', 'Hindi'];

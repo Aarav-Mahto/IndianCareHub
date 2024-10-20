@@ -21,6 +21,7 @@ public interface DAOService {
 	public boolean deleteEntry(int Entry_no);
 	
 	public List<Map<String, String>> showDB();
+	public List<Map<String, String>> showDB_ByOrder(String order);
 	
 	public String loadAboutOrgOfId(int id);
 	

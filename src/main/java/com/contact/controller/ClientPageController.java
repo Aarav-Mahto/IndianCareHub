@@ -123,6 +123,14 @@ public class ClientPageController {
 			if (allNum.size() <= 4) {
 				threeNum = Collections.emptyMap();
 			}
+			if(allNum.size() <= 1){
+				System.out.println(allNum);
+			}
+			if(allEmail.size() == 1){
+				boolean na = allEmail.values().iterator().next().trim().equalsIgnoreCase("NA");
+				if(na)
+					allEmail = Collections.emptyMap();
+			}
 			if (allEmail.size() <= 0) {
 				allEmail = Collections.emptyMap();
 			}

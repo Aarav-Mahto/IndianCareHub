@@ -80,15 +80,6 @@ public class AdminController {
 
 	@GetMapping("/dashboard")
 	public String dashboard() {
-		//helper.validateSession(session);
-		// session.setAttribute("fullName", "Not Found");
-		// session.setAttribute("emailId", "Not Found");
-		// session.setAttribute("userType", "Not Found");
-		// String user_name = "(Name Not Fetched)";
-		// if (session.getAttribute("fullName") != null) {
-		// 	user_name = (String) session.getAttribute("fullName");
-		// }
-		//session.setAttribute("user_name", "Not Found");
 		return "dashboard";
 	}
 
@@ -109,21 +100,6 @@ public class AdminController {
 	public String deletePage(Model model) {
 		model.addAttribute("view", "searchForDelete");
 		return "dashboard";// "/CRUD/delete";
-	}
-
-	@GetMapping("/showDB")
-	public String showDBPage(Model model) {
-		List<Map<String, String>> list = daoService.showDB();
-		helper.validateSession(session);
-		if (list.size() == 0) {
-			helper.setMsgSession(session, "No Record Fetched!", "red");
-			model.addAttribute("view", "showDB");
-			return "dashboard";
-		}
-
-		model.addAttribute("list", list);
-		model.addAttribute("view", "showDB");
-		return "dashboard";
 	}
 
 	@GetMapping("/register")
@@ -388,7 +364,7 @@ public class AdminController {
 			String imgUpload = null;
 			boolean delete_Image = false;
 			if (orgLogo == null || orgLogo.isEmpty() || orgLogo.getSize() <= 0) {
-				helper.setMsgSession(session, result + " Contact Updated (But You didn't input Image file)!", "green");
+				helper.setMsgSession(session, result + " Contact Updated in Entry No. "+Entry_no+" (But You didn't input Image file)!", "green");
 				return "redirect:/update";
 			} else {
 				contact.setPartFile(orgLogo);
@@ -397,23 +373,23 @@ public class AdminController {
 				delete_Image = helper.deleteFile(orgLogoName);
 
 				if (delete_Image && !helper.isNullOrEmpty(imgUpload)) {
-					helper.setMsgSession(session, result + " Contact And Image Updated!", "darkgreen");
+					helper.setMsgSession(session, result + " Contact And Image Updated in Entry No. "+Entry_no+"!", "darkgreen");
 				}
 				if (delete_Image && helper.isNullOrEmpty(imgUpload)) {
 					helper.setMsgSession(session,
-							result + " Contact Updated & Old Image Deleted But New Image Not Uploaded!", "hotpink");
+							result + " Contact Updated & Old Image Deleted But New Image Not Uploaded in Entry No. "+Entry_no+"!", "hotpink");
 				}
 				if (!delete_Image && !helper.isNullOrEmpty(imgUpload)) {
 					helper.setMsgSession(session,
-							result + " Contact Updated & New Image Uploaded But Old Image Not Deleted!", "hotpink");
+							result + " Contact Updated & New Image Uploaded But Old Image Not Deleted in Entry No. "+Entry_no+"!", "hotpink");
 				}
 				if (!delete_Image && helper.isNullOrEmpty(imgUpload)) {
-					helper.setMsgSession(session, result + " Contact Updated But Image Not Updated!", "green");
+					helper.setMsgSession(session, result + " Contact Updated But Image Not Updated in Entry No. "+Entry_no+"!", "green");
 				}
 				return "redirect:/update";
 			}
 		} else {
-			helper.setMsgSession(session, "Error! During Updating Image", "darkred");
+			helper.setMsgSession(session, "Error! During Updating Image in Entry No. "+Entry_no+"", "darkred");
 			return "redirect:/updateFound?searchId=" + Entry_no;
 		}
 
@@ -526,6 +502,33 @@ public class AdminController {
 			helper.setMsgSession(session, "Image(logo) Deleted But Data Not Deleted!", "darkred");
 			return "redirect:/deleteFound?deleteId=" + Entry_no;
 		}
+	}
+
+	@GetMapping("/showDB")
+	public String showDBPage(Model model) {
+		List<Map<String, String>> list = daoService.showDB();
+		helper.validateSession(session);
+		if (list.size() == 0) {
+			helper.setMsgSession(session, "No Record Fetched!", "red");
+			model.addAttribute("view", "showDB");
+			return "dashboard";
+		}
+		model.addAttribute("list", list);
+		model.addAttribute("view", "showDB");
+		return "dashboard";
+	}
+	@GetMapping("/showDB_ByOrder/{order}")
+	public String showDB_ByOrder(@PathVariable("order") String order ,Model model) {
+		List<Map<String, String>> list = daoService.showDB_ByOrder(order);
+		helper.validateSession(session);
+		if (list.size() == 0) {
+			helper.setMsgSession(session, "No Record Fetched!", "red");
+			model.addAttribute("view", "showDB");
+			return "dashboard";
+		}
+		model.addAttribute("list", list);
+		model.addAttribute("view", "showDB");
+		return "dashboard";
 	}
 
 	@PostMapping("/showAbout")

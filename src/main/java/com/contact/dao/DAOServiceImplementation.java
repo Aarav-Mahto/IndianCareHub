@@ -659,7 +659,32 @@ public class DAOServiceImplementation implements DAOService {
 
 	@Override
 	public List<Map<String, String>> showDB() {
-		String sql = "SELECT * FROM Contact";
+		//String sql = "SELECT * FROM Contact";
+		String sql = "SELECT * FROM Contact ORDER BY Updated DESC";
+		List<Map<String, String>> list = new ArrayList<>();
+		try {
+			jdbcTemplate.query(sql, new RowCallbackHandler() {
+				@Override
+				public void processRow(ResultSet rs) throws SQLException {
+					ResultSetMetaData rsmd = rs.getMetaData();
+					int columnCount = rsmd.getColumnCount();
+					Map<String, String> tempMap = new LinkedHashMap<>();
+					for (int i = 1; i <= columnCount; i++) {
+						tempMap.put(rsmd.getColumnName(i), rs.getString(i));
+					}
+					list.add(tempMap);
+				}
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Collections.emptyList();
+		}
+		return list;
+	}
+	@Override
+	public List<Map<String, String>> showDB_ByOrder(String order) {
+		//String sql = "SELECT * FROM Contact";
+		String sql = "SELECT * FROM Contact "+order;
 		List<Map<String, String>> list = new ArrayList<>();
 		try {
 			jdbcTemplate.query(sql, new RowCallbackHandler() {

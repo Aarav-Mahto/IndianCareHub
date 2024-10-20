@@ -173,7 +173,7 @@
 					<p th:each="anchor : ${anchorMap}">
 						<!-- <span th:text="|${allFields['orgName']} ${anchor.value[3]}|"></span> -->
 						<a th:href="@{${anchor.value[4]}}" th:text="|${allFields['orgName']} ${anchor.value[3]}|"
-							target="_blank" rel="noopener noreferrer"></a>
+							target="_blank" rel="noopener noreferrer nofollow"></a>
 					</p>
 
 				</div>
@@ -185,7 +185,7 @@
 					<div class="social-link-box">
 						<ul th:each="media : ${mediaLinks}">
 							<li th:class="${media.value[0]+' socialLinks_jsonLD'}">
-								<a th:href="@{${media.value[1]}}">
+								<a th:href="@{${media.value[1]}}" target="_blank" rel="noopener noreferrer nofollow">
 									<span th:text="${media.value[0]}"></span>
 									<i th:class="${media.value[2]}"></i>
 								</a>
@@ -195,26 +195,33 @@
 				</div>
 			</th:block>
 			<!-- --------------------------------------------------------------------------------------- -->
-
-			<div class="address-box">
-				<h2 th:text="${allFields['orgName']+' Address'}"></h2>
-				<p class="address-jsonLD" th:utext="${allFields['orgAddress']}"></p>
-			</div><br>
-			<div class="Web_Link">
-				<div class="call-logo"><span><i class="ri-link"></i></span></div>
-				<div>
-					<a th:href="@{${allFields['orgWebsite']}}">
-						<p th:text="${allFields['orgName']+' Official Website Contact Page'}"></p>
-					</a>
-				</div>
-			</div><br><br>
+			<th:block th:if="${not #strings.isEmpty(allFields['orgAddress']) and allFields['orgAddress'].toLowerCase() != 'na'}">
+				<div class="address-box">
+					<h2 th:text="${allFields['orgName']+' Address'}"></h2>
+					<p class="address-jsonLD" th:utext="${allFields['orgAddress']}"></p>
+				</div><br>
+			</th:block>
+			<th:block th:if="${not #strings.isEmpty(allFields['orgWebsite']) and allFields['orgWebsite'].toLowerCase() != 'na'}">
+				<div class="Web_Link">
+					<div class="call-logo"><span><i class="ri-link"></i></span></div>
+					<div>
+						<a th:href="@{${allFields['orgWebsite']}}" target="_blank" rel="noopener noreferrer nofollow">
+							<p th:text="${allFields['orgName']+' Official Website Contact Page'}"></p>
+						</a>
+					</div>
+				</div><br><br>
+			</th:block>
 			<!-- Manual Ads Unit_4 Display================-->
 			<!--=============END================== -->
-
+			
 			<div class="about-content" id="about-content">
-				<h2 th:text="|${allFields['sortName']} ${headings['Heading4']}|"></h2>
-				<span th:text="${allFields['pageTitle']+'.'}"></span>
-				<div th:utext="${allFields['orgAbout']}"></div>
+				<th:block th:if="${not #strings.isEmpty(allFields['orgAbout']) and allFields['orgAbout'].toLowerCase() != 'na'}">
+					<th:block th:if="${allFields['industryName'] != 'Stand_Alone'}">
+						<h2 th:text="|${allFields['sortName']} ${headings['Heading4']}|"></h2>
+					</th:block>
+					<span th:text="${allFields['pageTitle']+'.'}"></span>
+					<div th:utext="${allFields['orgAbout']}"></div>
+				</th:block>
 				<th:block th:if="${!questionMap.isEmpty()}">
 					<div class="qn-ans qn-ans-jsonld" th:each="qn : ${questionMap}">
 						<h3 class="qn-ans-qn qn-jsonld" th:utext="${qn.value[3]}"></h3>
@@ -223,25 +230,28 @@
 				</th:block>
 				<br><br>
 			</div>
+			
+			<th:block th:if="${!allEmail.isEmpty() && !allNum.isEmpty()}">
+				<div id="page-content" style="padding:0 10px;word-spacing: pre;">
+					<h4 th:text="${allFields['orgName']+' Contact Details Overview'}"></h4>
+					<p class="overview-jsonLD">This Page Contains a comprehensive and up-to-date <strong
+							th:text="|${allFields['orgName']} ${headings['Heading2']}|"></strong> and Telephone directory,
+						as well as a
+						detailed <strong th:text="|${allFields['sortName']} ${headings['Heading1']}|"></strong> for all
+						major
+						branches and departments across India. Whether you're looking for customer support, helpline
+						numbers, or contact information for any service or inquiry related to <strong
+							th:text="${allFields['orgName']}"></strong>, our extensive database ensures you can find the
+						information you need quickly and easily Such as: <strong
+							th:text="|${allFields['sortName']} ${headings['Heading4']}|"></strong> etc.</p>
+					<hr>
+					<p>
+						Are you a business? <br>
+						<a href="/addContactManually">Add Your Contact to Help Us Improve Your Customer Reach</a>
+					</p>
+				</div>
+			</th:block>
 
-			<div id="page-content" style="padding:0 10px;word-spacing: pre;">
-				<h4 th:text="${allFields['orgName']+' Contact Details Overview'}"></h4>
-				<p class="overview-jsonLD">This Page Contains a comprehensive and up-to-date <strong
-						th:text="|${allFields['orgName']} ${headings['Heading2']}|"></strong> and Telephone directory,
-					as well as a
-					detailed <strong th:text="|${allFields['sortName']} ${headings['Heading1']}|"></strong> for all
-					major
-					branches and departments across India. Whether you're looking for customer support, helpline
-					numbers, or contact information for any service or inquiry related to <strong
-						th:text="${allFields['orgName']}"></strong>, our extensive database ensures you can find the
-					information you need quickly and easily Such as: <strong
-						th:text="|${allFields['sortName']} ${headings['Heading4']}|"></strong> etc.</p>
-				<hr>
-				<p>
-					Are you a business? <br>
-					<a href="/addContactManually">Add Your Contact to Help Us Improve Your Customer Reach</a>
-				</p>
-			</div>
 			<th:block th:if="${!randomEntries.isEmpty()}">
 				<div id="related-content">
 					<h2>Recommended Content</h2>

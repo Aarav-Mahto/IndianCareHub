@@ -409,7 +409,8 @@ $(document).ready(function () {
 		"Private_Clinic",
 		"Transportation_Services",
 		"Hotel_Restaurant",
-		"People"
+		"People",
+		"Stand_Alone"
 	];
 	var industrySTD = {
 		"Finance": "Finance",
@@ -422,7 +423,8 @@ $(document).ready(function () {
 		"Private_Clinic": "Private_Clinic",
 		"Transportation_Services": "Transportation_Services",
 		"Hotel_Restaurant": "Hotel_Restaurant",
-		"People": "People"
+		"People": "People",
+		"Stand_Alone": "Stand_Alone"
 	};
 
 	// Add options to select

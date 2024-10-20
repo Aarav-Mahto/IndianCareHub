@@ -145,7 +145,7 @@
 				<form class="form" onsubmit="return updateValidation(event)" th:action="@{/updateFoundUpdateNow}"
 					method="POST" enctype="multipart/form-data">
 					<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" hidden />
-					<h2>Modify Data</h2>
+					<h2 th:text="${'Modify Entry No. '+allDetails['searchId']}"></h2>
 					<h5 th:style="'text-align:center;color:' + ${session.color}" th:text="${session.msg}"></h5>
 					<h5 id="show-error" style="text-align:center; color:red;"></h5>
 					<input type="number" name="Entry_no" th:value="${allDetails['searchId']}" hidden>
@@ -299,13 +299,18 @@
 					<div><span class="material-symbols-outlined down-up">arrow_upward</span></div>
 				</div>
 				<h2 style="color:white;">All Entries</h2>
+				<div>
+					<a href="/showDB_ByOrder/ORDER BY Entry_no ASC">Ascending</a>&nbsp;&nbsp;&nbsp;
+					<a href="/showDB_ByOrder/ORDER BY Entry_no DESC">Descending</a>&nbsp;&nbsp;&nbsp;
+					<a href="/showDB_ByOrder/ORDER BY Updated DESC">Latest Updated</a>
+				</div>
 				<div class="view-database">
 					<table>
 						<tr>
 							<th>Entries No</th>
 							<th>Org Name</th>
 							<th>Org Short Name</th>
-							<th>Org Other Name</th>
+							<th>pageUrl</th>
 							<th>Org Icon</th>
 							<th>About Org</th>
 							<th>Contacts</th>
@@ -320,7 +325,7 @@
 							<td th:text="${entry['Entry_no']}">1</td>
 							<td th:text="${entry['Org_Full_Name']}">Org Name</td>
 							<td th:text="${entry['Org_Short_Name']}">Org Short Name</td>
-							<td th:text="${entry['Org_Other_Name']}">Org Other Name</td>
+							<td th:text="${entry['pageUrl']}">pageUrl</td>
 							<td th:text="${entry['Org_Icon']}">Org Icon</td>
 							<td><button th:attr="data-entryno=${entry['Entry_no']}"
 									onclick="showAbout(this.getAttribute('data-entryno'))">About Org</button></td>
