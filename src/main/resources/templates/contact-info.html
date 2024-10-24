@@ -2,7 +2,39 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<meta charset="utf-8">
+    <script defer>
+        window.addEventListener('load', function() {
+            function loadAdsScript() {try {
+                var adsenseScript = document.createElement('script');
+                adsenseScript.defer = true;
+                adsenseScript.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2630992286399451";
+                adsenseScript.crossOrigin = "anonymous";
+                document.head.appendChild(adsenseScript);
+            }
+            catch (e) {console.error("Error during GTM initialization: ", e);}}
+            window.addEventListener('scroll', loadAdsScript, { once: true });
+            window.addEventListener('click', loadAdsScript, { once: true });
+            setTimeout(() => {loadAdsScript();}, 5000);
+        });
+    </script>
+    <!--Google Tag Manager -->
+        <script defer>window.addEventListener('load', function() {
+            function loadGTM() {try {
+                (function(w, d, s, l, i) {w[l] = w[l] || [];w[l].push({'gtm.start': new Date().getTime(), event: 'gtm.js'});
+                    var f = d.getElementsByTagName(s)[0],j = d.createElement(s),dl = l != 'dataLayer' ? '&l=' + l : '';
+                    j.defer = true;j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+                    f.parentNode.insertBefore(j, f);})(window, document, 'script', 'dataLayer', 'GTM-MVRG4226');}
+            catch (e) {console.error("Error during GTM initialization: ", e);}}
+            window.addEventListener('scroll', loadGTM, { once: true });
+            window.addEventListener('click', loadGTM, { once: true });
+            setTimeout(() => {loadGTM();}, 5000);
+        });</script>
+    <!--End Google Tag Manager -->
+    
+    
+ 
+    <meta name="google-adsense-account" content="ca-pub-2630992286399451">
+    <meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- Twitter -->
 	<meta name="twitter:card" content="summary_large_image">
@@ -39,7 +71,6 @@
 	<noscript>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.css"
 			referrerpolicy="no-referrer" />
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 	</noscript>
 
 	<script>
@@ -60,7 +91,7 @@
 			var customScript = document.createElement('script');
 			customScript.src = '/JS/contact-info.js';
 			customScript.type = 'text/javascript';
-			customScript.async = true;
+			customScript.defer = true;
 
 			customScript.onload = function () {
 				console.log('contact-info.js has been loaded successfully.');
@@ -73,12 +104,10 @@
 
 <body>
 
-	<!--	Google Tag Manager (noscript) -->
-	<noscript>
-		<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PVMW46WQ" height="0" width="0"
-			style="display:none;visibility:hidden"></iframe>
-	</noscript>
-	<!-- End Google Tag Manager (noscript)
+	<!-- Google Tag Manager (noscript) -->
+        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MVRG4226"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
 
 	<!-- Popup div -->
 	<div id="popup">
@@ -98,7 +127,7 @@
 				</ul>
 			</div>
 			<div class="heading-box">
-				<h1 th:text="${allFields['pageTitle']}"></h1>
+				<h1 style="color:white;font-size: var(--h1-font);text-align: center;margin:5px 8px;" th:text="${allFields['pageTitle']}"></h1>
 				<span id="last_Updated" th:text="${'Last Updated: '+allFields['lastUpdated']}"></span>
 			</div>
 		</div>
@@ -303,6 +332,14 @@
 <!-- 
 
 	<!-- Google Tag Manager 
+	//new gtm
+	<script async>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-MVRG4226');</script>
+        
+        
 	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
         new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
         j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
@@ -313,6 +350,8 @@
 	<!-- Google Adsense 
     <meta name="google-adsense-account" content="ca-pub-2630992286399451">
      <!-- End Google Adsense 
+     
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.css"
 		referrerpolicy="no-referrer" />
@@ -322,9 +361,17 @@
 	<script type="text/javascript">(function () { emailjs.init("xLkhpASd62DGUbmZ_"); })();</script>
 	<script type="text/javascript" th:src="@{/JS/contact-info.js}"></script>
 
-	<script async type='text/javascript'>//Show ads on page load
-			var la = !1; window.addEventListener("scroll", function () { (0 != document.documentElement.scrollTop && !1 === la || 0 != document.body.scrollTop && !1 === la) && (!function () { var e = document.createElement("script"); e.type = "text/javascript", e.async = !0, e.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2630992286399451"; var a = document.getElementsByTagName("script")[0]; a.parentNode.insertBefore(e, a) }(), la = !0) }, !0);
-		</script>
+	<script async type='text/javascript'>
+		var la = !1; 
+		window.addEventListener("scroll", function () { 
+		(0 != document.documentElement.scrollTop && !1 === la || 0 != document.body.scrollTop && !1 === la) && (!function () { 
+		var e = document.createElement("script"); 
+		    e.type = "text/javascript", 
+		    e.async = !0, 
+		    e.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2630992286399451"; 
+		var a = document.getElementsByTagName("script")[0]; 
+		a.parentNode.insertBefore(e, a) }(), la = !0) }, !0);
+	</script>
 
 
 	<a href="//www.dmca.com/Protection/Status.aspx?ID=2fa696c2-3093-4f4e-a7e7-e3907994ab34"

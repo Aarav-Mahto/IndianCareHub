@@ -1,128 +1,5 @@
 $(document).ready(async function () {
 
-    //============= Google Tag Manager ========================
-    try {
-        if (location.hostname === 'localhost') {
-            console.log("Mocking GTM load on localhost");
-        } else {
-            $('<script/>', {
-                text: "(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':" +
-                    "new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0]," +
-                    "j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=" +
-                    "'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);" +
-                    "})(window,document,'script','dataLayer','GTM-PVMW46WQ');"
-            }).prependTo('head');
-        }
-    } catch (error) {
-        console.log("Error while prepending the google tag manager tag into head: ", error);
-    }
-    //===============================================
-    //============= Adsense Tag ========================
-    try {
-        $('<meta/>', {
-            name: 'google-adsense-account',
-            content: 'ca-pub-2630992286399451'
-        }).prependTo('head');
-
-        if (location.hostname === 'localhost') {
-            console.log("Mocking Adsense load on localhost");
-        } else {
-            $('<script/>', {
-                async: true,
-                src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2630992286399451',
-                crossorigin: 'anonymous'
-            }).prependTo('head');
-        }
-    } catch (error) {
-        console.log("Error while prepending the adsense tag into head: ", error);
-    }
-    //-----------------------------------------------------------------------------
-    //============================ Load Adsense On Scroll =========================
-    try {
-        var la = false;
-        await $(window).on("scroll", function () {
-            if ((!$(document).scrollTop() && la === false) || (!$(window).scrollTop() && la === false)) {
-                (function () {
-                    var e = document.createElement("script");
-                    e.type = "text/javascript";
-                    e.async = true;
-                    e.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2630992286399451";
-                    var a = $("script")[0];
-                    a.parentNode.insertBefore(e, a);
-                })();
-                la = true;
-            }
-        });
-    } catch (error) {
-        console.error("An error occurred while loading the script:", error);
-    }
-    //---------------------------------------------------------------------
-
-    /*!!!!!!!!!!!!!!!!!!!!!!!!!!!--- Adsense Container ----!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-
-    //=================Adsense Unit - 1 ===========================
-    // try {
-    //     var adsElement = $('<ins/>', {
-    //         class: 'adsbygoogle',
-    //         style: 'display:block; height: 200px !important; margin-bottom: 30px;',
-    //         'data-ad-client': 'ca-pub-2630992286399451',
-    //         'data-ad-slot': '2903953482',
-    //         'data-ad-format': 'auto',
-    //         'data-full-width-responsive': 'true'
-    //     });
-    //     var scriptElement = $('<script/>', {
-    //         text: '(adsbygoogle = window.adsbygoogle || []).push({});'
-    //     });
-    //     $('#ad-container-1').append(adsElement).append(scriptElement);
-    // } catch (error) {
-    //     console.log("Error while appending the Adsense ad to #ad-container-1: ", error);
-    // }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
-
-
-
-
-
-
-
-
-
-
     //====================Append DMCA Badge=============
     try {
 
@@ -134,13 +11,13 @@ $(document).ready(async function () {
         }).appendTo('#dmca-container');
 
         $('<script/>', {
-            src: 'https://images.dmca.com/Badges/DMCABadgeHelper.min.js'
+            src: 'https://images.dmca.com/Badges/DMCABadgeHelper.min.js',
+            async: true
         }).appendTo('#dmca-container');
     } catch (error) {
         console.log("error While Appending DMCA Baadge: ", error);
     }
     //--------------------------------------------------------------------------
-
 
     try {
         $('<link/>', {
@@ -167,41 +44,41 @@ $(document).ready(async function () {
     } catch (error) {
         console.log("Error while preparing for email.js: ", error);
     }
-
-    try {
-        $('#cookies-box').fadeIn();
-        if (getCookie('cookiesAccepted') === 'true' || getCookie('cookiesAccepted') === 'false') {
-            $('#cookies-box').hide();
-        }
-        $('#accept-cookies').click(function () {
-            $('#cookies-box').fadeOut();
-            setCookie('cookiesAccepted', 'true', 7);
-        })
-        $('#reject-cookies').click(function () {
-            $('#cookies-box').fadeOut();
-            setCookie('cookiesAccepted', 'false', 7);
-        })
-    } catch (error) {
-        console.log("Cookies Related Issues: ", error);
-    }
-    function setCookie(name, value, days) {
-        let expires = "";
-        if (days) {
-            let date = new Date();
-            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-            expires = "; expires=" + date.toUTCString();
-        }
-        document.cookie = name + "=" + (value || "") + expires + "; path=/";
-    }
-    function getCookie(name) {
-        let nameEQ = name + "=";
-        let ca = document.cookie.split(';');
-        for (let i = 0; i < ca.length; i++) {
-            let c = ca[i].trim();
-            if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
-        }
-        return null;
-    }
+//-------------- Cookies------------------------------
+    // try {
+    //     $('#cookies-box').fadeIn();
+    //     if (getCookie('cookiesAccepted') === 'true' || getCookie('cookiesAccepted') === 'false') {
+    //         $('#cookies-box').hide();
+    //     }
+    //     $('#accept-cookies').click(function () {
+    //         $('#cookies-box').fadeOut();
+    //         setCookie('cookiesAccepted', 'true', 7);
+    //     })
+    //     $('#reject-cookies').click(function () {
+    //         $('#cookies-box').fadeOut();
+    //         setCookie('cookiesAccepted', 'false', 7);
+    //     })
+    // } catch (error) {
+    //     console.log("Cookies Related Issues: ", error);
+    // }
+    // function setCookie(name, value, days) {
+    //     let expires = "";
+    //     if (days) {
+    //         let date = new Date();
+    //         date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    //         expires = "; expires=" + date.toUTCString();
+    //     }
+    //     document.cookie = name + "=" + (value || "") + expires + "; path=/";
+    // }
+    // function getCookie(name) {
+    //     let nameEQ = name + "=";
+    //     let ca = document.cookie.split(';');
+    //     for (let i = 0; i < ca.length; i++) {
+    //         let c = ca[i].trim();
+    //         if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+    //     }
+    //     return null;
+    // }
 
 
 

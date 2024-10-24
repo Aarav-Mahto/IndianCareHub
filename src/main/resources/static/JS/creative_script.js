@@ -42,171 +42,109 @@ $(document).ready(async function () {
     } catch (error) {
         console.log("Error While Adding Links: ", error);
     }
-    //============= Google Tag Manager ========================
-    // try {
-    //     if (location.hostname === 'localhost') {
-    //         console.log("Mocking GTM load on localhost");
-    //     } else {
-    //         $('<script/>', {
-    //             text: "(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':" +
-    //                 "new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0]," +
-    //                 "j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=" +
-    //                 "'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);" +
-    //                 "})(window,document,'script','dataLayer','GTM-PVMW46WQ');"
-    //         }).prependTo('head');
-    //     }
-    // } catch (error) {
-    //     console.log("Error while prepending the google tag manager tag into head: ", error);
-    // }
-    //===============================================
-    //============= Adsense Tag ========================
-    try {
-        $('<meta/>', {
-            name: 'google-adsense-account',
-            content: 'ca-pub-2630992286399451'
-        }).prependTo('head');
-
-        if (location.hostname === 'localhost') {
-            console.log("Mocking Adsense load on localhost");
-        } else {
-            $('<script/>', {
-                async: true,
-                src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2630992286399451',
-                crossorigin: 'anonymous'
-            }).prependTo('head');
-        }
-    } catch (error) {
-        console.log("Error while prepending the adsense tag into head: ", error);
-    }
-    //-------------Load Adsense On Scroll --------
-    try {
-        var la = false;
-        await $(window).on("scroll", function () {
-            if ((!$(document).scrollTop() && la === false) || (!$(window).scrollTop() && la === false)) {
-                (function () {
-                    var e = document.createElement("script");
-                    e.type = "text/javascript";
-                    e.async = true;
-                    e.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2630992286399451";
-                    var a = $("script")[0];
-                    a.parentNode.insertBefore(e, a);
-                })();
-                la = true;
-            }
-        });
-    } catch (error) {
-        console.error("Error Occured while loading the 'Show Ads On Scroll': ", error);
-    }
-
-
-
-
-
-
-
 
     //========================== Cookies===============================
-    try {
+    //try {
         // Existing GTM implementation
-        if (location.hostname === 'localhost') {
-            console.log("Mocking GTM load on localhost");
-        } else {
-            await new Promise((resolve, reject) => {
-                try {
-                    $('<script/>', {
-                        text: "(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':" +
-                            "new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0]," +
-                            "j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=" +
-                            "'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);" +
-                            "})(window,document,'script','dataLayer','GTM-PVMW46WQ');"
-                    }).prependTo('head');
-                    resolve();
-                } catch (error) {
-                    console.error("Error loading GTM script: ", error);
-                    reject(error);
-                }
-            });
-        }
+        // if (location.hostname === 'localhost') {
+        //     console.log("Mocking GTM load on localhost");
+        // } else {
+        //     await new Promise((resolve, reject) => {
+        //         try {
+        //             $('<script/>', {
+        //                 text: "(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':" +
+        //                     "new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0]," +
+        //                     "j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=" +
+        //                     "'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);" +
+        //                     "})(window,document,'script','dataLayer','GTM-PVMW46WQ');"
+        //             }).prependTo('head');
+        //             resolve();
+        //         } catch (error) {
+        //             console.error("Error loading GTM script: ", error);
+        //             reject(error);
+        //         }
+        //     });
+        // }
 
         // Add Google Analytics Measurement ID
-        try {
-            $('<script async src="https://www.googletagmanager.com/gtag/js?id=G-1GFV57QT55"></script>').prependTo('head');
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-1GFV57QT55', {
-                'anonymize_ip': true,
-                'ad_storage': 'denied', // Default to denied
-                'analytics_storage': 'denied' // Default to denied
-            });
-        } catch (error) {
-            console.error("Error initializing Google Analytics: ", error);
-        }
+        // try {
+        //     $('<script async src="https://www.googletagmanager.com/gtag/js?id=G-1GFV57QT55"></script>').prependTo('head');
+        //     window.dataLayer = window.dataLayer || [];
+        //     function gtag(){dataLayer.push(arguments);}
+        //     gtag('js', new Date());
+        //     gtag('config', 'G-1GFV57QT55', {
+        //         'anonymize_ip': true,
+        //         'ad_storage': 'denied', // Default to denied
+        //         'analytics_storage': 'denied' // Default to denied
+        //     });
+        // } catch (error) {
+        //     console.error("Error initializing Google Analytics: ", error);
+        // }
 
         // Function to handle cookies consent
-        $('#cookies-box').fadeIn();
-        if (getCookie('cookiesAccepted') === 'true' || getCookie('cookiesAccepted') === 'false') {
-            $('#cookies-box').hide();
-        }
+    //     $('#cookies-box').fadeIn();
+    //     if (getCookie('cookiesAccepted') === 'true' || getCookie('cookiesAccepted') === 'false') {
+    //         $('#cookies-box').hide();
+    //     }
 
-        $('#accept-cookies').click(async function () {
-            try {
-                $('#cookies-box').fadeOut();
-                setCookie('cookiesAccepted', 'true', 7);
-                // Push consent initialization event
-                dataLayer.push({
-                    event: "gtm.init_consent",
-                    'gtm.uniqueEventId': -1 // Unique identifier for consent initialization
-                });
-            } catch (error) {
-                console.error("Error handling cookie acceptance: ", error);
-            }
-        });
+    //     $('#accept-cookies').click(async function () {
+    //         try {
+    //             $('#cookies-box').fadeOut();
+    //             setCookie('cookiesAccepted', 'true', 7);
+    //             // Push consent initialization event
+    //             dataLayer.push({
+    //                 event: "gtm.init_consent",
+    //                 'gtm.uniqueEventId': -1 // Unique identifier for consent initialization
+    //             });
+    //         } catch (error) {
+    //             console.error("Error handling cookie acceptance: ", error);
+    //         }
+    //     });
 
-        $('#reject-cookies').click(async function () {
-            try {
-                $('#cookies-box').fadeOut();
-                setCookie('cookiesAccepted', 'false', 7);
-                // Optionally push consent denial event if needed
-                dataLayer.push({
-                    event: "gtm.consent_denied",
-                    'gtm.uniqueEventId': -1 // Unique identifier for consent denial
-                });
-            } catch (error) {
-                console.error("Error handling cookie rejection: ", error);
-            }
-        });
-    } catch (error) {
-        console.error("Error in document ready function: ", error);
-    }
+    //     $('#reject-cookies').click(async function () {
+    //         try {
+    //             $('#cookies-box').fadeOut();
+    //             setCookie('cookiesAccepted', 'false', 7);
+    //             // Optionally push consent denial event if needed
+    //             dataLayer.push({
+    //                 event: "gtm.consent_denied",
+    //                 'gtm.uniqueEventId': -1 // Unique identifier for consent denial
+    //             });
+    //         } catch (error) {
+    //             console.error("Error handling cookie rejection: ", error);
+    //         }
+    //     });
+    // } catch (error) {
+    //     console.error("Error in document ready function: ", error);
+    // }
 
-    function setCookie(name, value, days) {
-        try {
-            let expires = "";
-            if (days) {
-                let date = new Date();
-                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-                expires = "; expires=" + date.toUTCString();
-            }
-            document.cookie = name + "=" + (value || "") + expires + "; path=/";
-        } catch (error) {
-            console.error("Error setting cookie: ", error);
-        }
-    }
+    // function setCookie(name, value, days) {
+    //     try {
+    //         let expires = "";
+    //         if (days) {
+    //             let date = new Date();
+    //             date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    //             expires = "; expires=" + date.toUTCString();
+    //         }
+    //         document.cookie = name + "=" + (value || "") + expires + "; path=/";
+    //     } catch (error) {
+    //         console.error("Error setting cookie: ", error);
+    //     }
+    // }
 
-    function getCookie(name) {
-        try {
-            let nameEQ = name + "=";
-            let ca = document.cookie.split(';');
-            for (let i = 0; i < ca.length; i++) {
-                let c = ca[i].trim();
-                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
-            }
-            return null;
-        } catch (error) {
-            console.error("Error getting cookie: ", error);
-        }
-    }
+    // function getCookie(name) {
+    //     try {
+    //         let nameEQ = name + "=";
+    //         let ca = document.cookie.split(';');
+    //         for (let i = 0; i < ca.length; i++) {
+    //             let c = ca[i].trim();
+    //             if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+    //         }
+    //         return null;
+    //     } catch (error) {
+    //         console.error("Error getting cookie: ", error);
+    //     }
+    // }
 
 
 
