@@ -1,6 +1,7 @@
 package com.contact.entity;
 
 import java.sql.Date;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,8 +30,8 @@ public class Contact {
 	private String pageDesc;
 	
 	//New List
-	private List<String> nm;
-	private List<String> dept;
+	private List<String> nm = Collections.emptyList();
+	private List<String> dept = Collections.emptyList();
 	
 	private MultipartFile partFile;
 	

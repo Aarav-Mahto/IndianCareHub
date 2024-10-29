@@ -167,8 +167,8 @@ public class AdminController {
 		// ===================================================================
 		contact.setOrg_Full_Name(orgFullName);
 		contact.setOrg_Short_Name(orgAliasName);
-		contact.setPageUrl(pageUrl.trim());
-		contact.setPageTitle(pageTitle.trim().toLowerCase());
+		contact.setPageUrl(pageUrl);
+		contact.setPageTitle(pageTitle.trim());
 		contact.setOrg_Icon(orgLogo.getOriginalFilename());
 		contact.setAbout_Company(aboutCompany);
 		contact.setAddress(orgAddress);
@@ -194,15 +194,16 @@ public class AdminController {
 				}
 			}
 		}
-		if (name_links != null) {
+		if (name_links != null || !name_links.isEmpty()) {
 			contact.setMedia_links(name_links);
-			name_links = null;
+			name_links = Collections.emptyMap();
 		}
 		// ==================================================================
 		Map<String, String> name_number = new LinkedHashMap<>();
 		for (int i = 0; i < departName.size(); i++) {
 			name_number.put(departName.get(i), departNumber.get(i));
 		}
+
 		contact.setAllFields(name_number);
 		name_number = null;
 		contact.setPartFile(orgLogo);
@@ -239,8 +240,7 @@ public class AdminController {
 		userCredential = authenticationDone.getUserInfoSession();
 		model.addAttribute("industry", daoService.AllSeoedIndustry());
 
-		if (!searchId.trim().equals("") && searchId.trim() != "" && searchId.trim() != null
-				&& !searchId.trim().equals(null)) {
+		if (searchId != null ||!searchId.trim().equals("") || !(searchId.length() < 1)) {
 			int sid = Integer.parseInt(searchId);
 			if (sid > 0) {
 				Map<String, Object> result = daoService.searchId(sid);
@@ -324,9 +324,9 @@ public class AdminController {
 			@RequestParam(value = "PhoneEmail", required = false) List<String> departNumber) {
 		helper.validateSession(session);
 		userCredential = authenticationDone.getUserInfoSession();
-		if (helper.isNullOrEmpty(orgFullName, orgAliasName, pageTitle, aboutCompany, orgAddress, websiteLink)) {
+		if (helper.isNullOrEmpty(orgFullName, orgAliasName, pageTitle, pageUrl, aboutCompany, orgAddress, websiteLink)) {
 			helper.setMsgSession(session, "* Every Fields are mandatory!", "darkred");
-			return "redirect:/u)pdateFound?searchId=" + Entry_no;
+			return "redirect:/updateFound?searchId=" + Entry_no;
 		}
 		if (helper.isNullOrEmptyList(departName, departNumber)) {
 			helper.setMsgSession(session, "Please Enter Some Contact Number or Email!", "darkred");
@@ -491,7 +491,6 @@ public class AdminController {
 				}
 
 			} else {
-				System.out.println("Some Error Occured, Data Not Deleted!");
 				model.addAttribute("view", "deleteFound");
 				helper.setMsgSession(session, "Image(logo) Deleted But Data Not Deleted!", "darkred");
 				return "redirect:/deleteFound?deleteId=" + Entry_no;
@@ -696,6 +695,31 @@ public class AdminController {
 		model.addAttribute("view", "registerPage");
 		model.addAttribute("register", register);
 		return "dashboard";
+	}
+
+
+	///=========== Show Database ====================
+	@GetMapping("/databasePage/{order}")
+	public String showDatabase(@PathVariable("order") String order, Model model) {
+		List<Map<String, String>> list = daoService.database(order);
+		helper.validateSession(session);
+		if (list.size() == 0) {
+			helper.setMsgSession(session, "No Record Fetched!", "red");
+			model.addAttribute("view", "showDB");
+			return "dashboard";
+		}
+		model.addAttribute("list", list);
+		model.addAttribute("view", "showDB");
+		return "showdata";
+	}
+	@PostMapping("/showDbSearch")
+	public ResponseEntity<List<Map<String, String>>> suggessionPage(@RequestParam("character") String character) {
+		System.out.println(character);
+		if(character != null || !character.trim().equals("")){
+			List<Map<String, String>> result = daoService.databaseSearch(character);
+			return ResponseEntity.ok(result);
+		}
+		return ResponseEntity.ok(Collections.emptyList());
 	}
 
 }

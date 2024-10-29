@@ -22,6 +22,8 @@ public interface DAOService {
 	
 	public List<Map<String, String>> showDB();
 	public List<Map<String, String>> showDB_ByOrder(String order);
+	public List<Map<String, String>> database(String order);
+	public List<Map<String, String>> databaseSearch(String charct);
 	
 	public String loadAboutOrgOfId(int id);
 	
@@ -39,7 +41,7 @@ public interface DAOService {
 	
 	public String jsonResponse(String character);
 	
-	public List<Map<String, String>> sitemap();
+	//public List<Map<String, String>> sitemap();
 	/*
 	public int addSeo();
 	
@@ -55,3 +57,4 @@ public interface DAOService {
 	public List<Map<String,String>> newSitemap();
 	
 }
+

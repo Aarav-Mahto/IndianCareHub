@@ -1,53 +1,53 @@
 //================Timeout=================
-const sessionTimeout = 30 * 60;
-const keepAliveInterval = 25 * 60; 
+const sessionTimeout = 15 * 60;
 let timeRemaining = sessionTimeout;
 let countdownInterval;
 
 function updateCountdownDisplay() {
-    let hours = Math.floor(timeRemaining / 3600);
-    let minutes = Math.floor((timeRemaining % 3600) / 60);
-    let seconds = timeRemaining % 60;
-    $('#time').text(`${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`);
+	let hours = Math.floor(timeRemaining / 3600);
+	let minutes = Math.floor((timeRemaining % 3600) / 60);
+	let seconds = timeRemaining % 60;
+	$('#time').text(`${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`);
 }
 
 function startCountdown() {
-    updateCountdownDisplay();
-    countdownInterval = setInterval(() => {
-        if (timeRemaining <= 0) {
-            clearInterval(countdownInterval);
-            sendKeepAliveRequest();
-            $('#time').text("Session Expired");
-        } else {
-            timeRemaining--;
-            updateCountdownDisplay();
-        }
-    }, 1000);
+	updateCountdownDisplay();
+	countdownInterval = setInterval(() => {
+		if (timeRemaining <= 0) {
+			clearInterval(countdownInterval);
+			sendKeepAliveRequest();
+			$('#time').text("Session Expired");
+		} else {
+			timeRemaining--;
+			updateCountdownDisplay();
+		}
+	}, 1000);
 }
 
 function sendKeepAliveRequest() {
-    var token = $('meta[name="_csrf"]').attr('content');
-    var header = $('meta[name="_csrf_header"]').attr('content');
-    $.ajax({
-        url: '/keep-alive',
-        method: 'POST',
-        beforeSend: function (xhr) {
-            xhr.setRequestHeader(header, token);
-        },
-        success: function () {
-            console.log('Session kept alive');
-            timeRemaining = sessionTimeout;
-            clearInterval(countdownInterval);
-            startCountdown();
-        },
-        error: function () {
-            console.error('Failed to keep session alive');
-        }
-    });
+	var token = $('meta[name="_csrf"]').attr('content');
+	var header = $('meta[name="_csrf_header"]').attr('content');
+	$.ajax({
+		url: '/keep-alive',
+		method: 'POST',
+		beforeSend: function (xhr) {
+			xhr.setRequestHeader(header, token);
+		},
+		success: function () {
+			console.log('Session kept alive');
+			timeRemaining = sessionTimeout;
+			//clearInterval(countdownInterval);
+			startCountdown();
+		},
+		error: function () {
+			console.error('Failed to keep session alive');
+		}
+	});
 }
-startCountdown();
-
-
+startCountdown()
+setInterval(() => {
+    sendKeepAliveRequest();
+}, 15 * 60 * 1000);
 
 
 var dialogInstance;
@@ -80,6 +80,70 @@ function customAlert(dialogContent, title) {
 		}
 	});
 }
+$('#showDbSearch input').keyup(function (event) {
+	event.preventDefault();
+	var token = $('meta[name="_csrf"]').attr('content');
+	var header = $('meta[name="_csrf_header"]').attr('content');
+	let search_text = $(this).val().trim();
+	if (search_text === '') {
+		return;
+	}
+	else {
+		$.ajax({
+			url: '/showDbSearch',
+			type: 'POST',
+			data: { character: search_text },
+			dataType: 'json',
+			beforeSend: function (xhr) {
+				xhr.setRequestHeader(header, token);
+			},
+			success: function (data) {
+				const resultArray = Object.values(data);
+				const $container = $('#foundDB');
+				$container.empty();
+				if (Array.isArray(resultArray)) {
+					$('.view-database').fadeOut();
+					resultArray.forEach(item => {
+						$container.append(`
+							<details>
+								<summary>${item.orgName}</summary>
+								<table>
+									<tr>
+										<th>Page Id</th>
+										<td>${item.Entry_no}</td>
+									</tr>
+									<tr>
+										<th>Page Title</th>
+										<td>${item.pageTitle}</td>
+									</tr>
+									<tr>
+										<th>Page Url</th>
+										<td>${item.pageUrl || ""}</td>
+									</tr>
+									<tr>
+										<th>About</th>
+										<td style="Overflow:auto;">${item.aboutOrg}</td>
+									</tr>
+									<tr>
+										<th>Industry Type</th>
+										<td>${item.industryName}</td>
+									</tr>
+
+								</table>
+							</details>
+						`);
+					});
+				} else {
+					console.error("Expected an array but received:", data);
+				}
+			},
+			error: function (xhr, status, error) {
+				console.error("Error: ", error);
+			}
+		})
+	}
+});
+
 function showAbout(postid) {
 
 	var token = $('meta[name="_csrf"]').attr('content');

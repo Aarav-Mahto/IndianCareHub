@@ -35,7 +35,7 @@ public class JWTSecurityClass {
 
                 return security
                                 .authorizeHttpRequests(auth -> auth
-                                                .requestMatchers("/static/**", "/CSS/**", "/JS/**", "/Image/**",
+                                                .requestMatchers("/static", "/static/**", "/CSS/**", "/JS/**", "/Image/**",
                                                                 "/OTHER/**", "/logo/**", "/error")
                                                 .permitAll()
                                                 .requestMatchers("/", "/contact", "/contact/**", "/terms",

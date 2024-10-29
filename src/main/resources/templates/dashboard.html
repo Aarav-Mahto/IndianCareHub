@@ -299,44 +299,53 @@
 					<div><span class="material-symbols-outlined down-up">arrow_upward</span></div>
 				</div>
 				<h2 style="color:white;">All Entries</h2>
-				<div>
+				<div id="arrange-bd">
 					<a href="/showDB_ByOrder/ORDER BY Entry_no ASC">Ascending</a>&nbsp;&nbsp;&nbsp;
 					<a href="/showDB_ByOrder/ORDER BY Entry_no DESC">Descending</a>&nbsp;&nbsp;&nbsp;
 					<a href="/showDB_ByOrder/ORDER BY Updated DESC">Latest Updated</a>
 				</div>
+				<div id="showDbSearch">
+					<input type="text" placeholder="search...">
+				</div>
+				<div id="foundDB">
+				</div>
 				<div class="view-database">
 					<table>
 						<tr>
-							<th>Entries No</th>
-							<th>Org Name</th>
-							<th>Org Short Name</th>
+							<th>Entry_No</th>
+							<th>orgName</th>
+							<th>orgSortName</th>
 							<th>pageUrl</th>
-							<th>Org Icon</th>
-							<th>About Org</th>
-							<th>Contacts</th>
-							<th>Org Address</th>
-							<th>Org Link</th>
-							<th>Entry Date</th>
-							<th>Enter By</th>
+							<th>pageTitle</th>
+							<th>industryName</th>
+							<th>orgAddress</th>
+							<th>entryDate</th>
+							<th>enteredBy</th>
 							<th>Updated</th>
-							<th>Updated_by</th>
+							<th>updatedBy</th>
+							<th>aboutOrg</th>
+							<th>Contacts</th>
+							<th>Logo</th>
+							<th>orgLink</th>
 						</tr>
 						<tr th:each="entry, stat : ${list}">
 							<td th:text="${entry['Entry_no']}">1</td>
 							<td th:text="${entry['Org_Full_Name']}">Org Name</td>
 							<td th:text="${entry['Org_Short_Name']}">Org Short Name</td>
 							<td th:text="${entry['pageUrl']}">pageUrl</td>
-							<td th:text="${entry['Org_Icon']}">Org Icon</td>
-							<td><button th:attr="data-entryno=${entry['Entry_no']}"
-									onclick="showAbout(this.getAttribute('data-entryno'))">About Org</button></td>
-							<td><button th:attr="data-entryno=${entry['Entry_no']}"
-									onclick="showContacts(this.getAttribute('data-entryno'))">Show Contact</button></td>
+							<td th:text="${entry['pageTitle']}">pageTitle</td>
+							<td th:text="${entry['industryName']}">industryName</td>
 							<td th:text="${entry['Address']}">Org Address</td>
-							<td th:text="${entry['Web_Link']}">Org Link</td>
 							<td th:text="${entry['Entry_Date']}">Entry Date</td>
 							<td th:text="${entry['Entered_By']}">Enter By</td>
 							<td th:text="${entry['Updated']}">Updated</td>
 							<td th:text="${entry['Updated_by']}">Updated_by</td>
+							<td><button th:attr="data-entryno=${entry['Entry_no']}"
+								onclick="showAbout(this.getAttribute('data-entryno'))">About Org</button></td>
+							<td><button th:attr="data-entryno=${entry['Entry_no']}"
+								onclick="showContacts(this.getAttribute('data-entryno'))">Show Contact</button></td>
+							<td th:text="${entry['Org_Icon']}">Org_Icon</td>
+							<td th:text="${entry['Web_Link']}">Org Link</td>
 						</tr>
 					</table>
 				</div>

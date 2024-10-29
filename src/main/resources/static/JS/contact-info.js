@@ -181,6 +181,9 @@ function cmdLineCopy(copyIt) {
 
 /* ~~~~~~~~~~~~~~~~~~~~~~ JSON-LD Formater~~~~~~~~~~~~~~~~~ */
 async function jsonLD() {
+    function isArrayNullOrEmpty(arr) {
+        return !Array.isArray(arr) || arr.length === 0; // Returns true if arr is not an array or if it is empty
+    }
     var type = $('#type-jsonLD').text().trim().toLowerCase();
     var type_secondry = (type === 'person' || type === 'stand_alone') ? "Person" : "Organization";
 
@@ -243,15 +246,21 @@ async function jsonLD() {
                 "@type": "PostalAddress",
                 "streetAddress": orgAddress
             },
-            "contactPoint": allNumbers.concat(emailMessages),
+            "contactPoint": (!isArrayNullOrEmpty(allNumbers) || !isArrayNullOrEmpty(emailMessages)) ? 
+            allNumbers.concat(emailMessages).filter(Boolean) : undefined,
             "additionalType": "https://schema.org/ContactInformation",
             "areaServed": countryName
         },
         "mainEntityOfPage": {
             "@type": "FAQPage", // FAQ section
-            "mainEntity": qnAnsArray
+            "mainEntity": !isArrayNullOrEmpty(qnAnsArray) ? qnAnsArray : undefined
         }
     };
+    for (const key in jsonLD) {
+        if (jsonLD[key] === undefined) {
+            delete jsonLD[key]; // Remove properties with undefined values
+        }
+    }
     $('head').append(`<script type="application/ld+json">${JSON.stringify(jsonLD)}</script>`);
 }
 

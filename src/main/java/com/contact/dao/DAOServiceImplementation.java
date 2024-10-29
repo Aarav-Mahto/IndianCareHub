@@ -59,9 +59,6 @@ public class DAOServiceImplementation implements DAOService {
 					contact.getOrg_Short_Name(),
 					contact.getPageUrl(),
 					contact.getPageTitle(),
-					// helper.SeoKeywords(contact.getOrg_Full_Name(), contact.getOrg_Short_Name(),
-					// contact.getPageUrl()),
-					// helper.seoDesc(contact.getNm(), contact.getDept()),
 					contact.getOrg_Icon(),
 					contact.getAbout_Company(),
 					contact.getAddress(),
@@ -102,7 +99,7 @@ public class DAOServiceImplementation implements DAOService {
 
 				@Override
 				public int getBatchSize() {
-					return numbers.size();
+					return numbers != null ? numbers.size() : 0;
 				}
 			});
 			return Arrays.stream(results).sum();
@@ -130,7 +127,7 @@ public class DAOServiceImplementation implements DAOService {
 
 				@Override
 				public int getBatchSize() {
-					return mediaLinkMap.size();
+					return mediaLinkMap != null ? mediaLinkMap.size() : 0;
 				}
 			});
 			return Arrays.stream(results).sum(); // Sum of update counts
@@ -139,34 +136,7 @@ public class DAOServiceImplementation implements DAOService {
 			return 0;
 		}
 	}
-	// private int insertLinks(Map<String, String> mediaLinkMap, int lastInserted) {
-	// String sql = "INSERT INTO ContactSocialLinks (Company_Id, MediaName,
-	// MediaLinks) " +
-	// "VALUES (?, ?, ?)";
-	// try {
-	// //Map<String, String> mediaLinkMap = contact.getMedia_links();
-	// int[] results = jdbcTemplate.batchUpdate(sql, new
-	// BatchPreparedStatementSetter() {
-	// @Override
-	// public void setValues(PreparedStatement ps, int i) throws SQLException {
-	// Map.Entry<String, String> entry = (Map.Entry<String, String>)
-	// mediaLinkMap.entrySet().toArray()[i];
-	// ps.setInt(1, lastInserted);
-	// ps.setString(2, entry.getKey());
-	// ps.setString(3, entry.getValue());
-	// }
 
-	// @Override
-	// public int getBatchSize() {
-	// return mediaLinkMap.size();
-	// }
-	// });
-	// return Arrays.stream(results).sum();
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// return 0;
-	// }
-	// }
 	private int insertQuestionAnchor(QuestionAnchor questionAnchor, int lastInserted) {
 		String sql = "INSERT INTO QuestionAnchor (CompanyId, ContentType, ContentName, Content) " +
 				"VALUES (?, ?, ?, ?)";
@@ -244,7 +214,7 @@ public class DAOServiceImplementation implements DAOService {
 
 					return result;
 				}
-				return Collections.emptyMap(); // Return null if no matching row is found
+				return Collections.emptyMap(); // Return empty if no matching row is found
 			});
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -294,7 +264,7 @@ public class DAOServiceImplementation implements DAOService {
 			}, new ResultSetExtractor<Map<Integer, List<String>>>() {
 				@Override
 				public Map<Integer, List<String>> extractData(ResultSet rs) throws SQLException {
-					Map<Integer, List<String>> map = new HashMap<>();
+					Map<Integer, List<String>> map = new LinkedHashMap<>();
 					int i = 1;
 					while (rs.next()) {
 						List<String> tempList = Arrays.asList(
@@ -477,18 +447,19 @@ public class DAOServiceImplementation implements DAOService {
 			return null;
 		}
 	}
-	private Map<String, String> fetchRandomEntries(String industryName){
-		String query = "SELECT pageUrl, pageTitle FROM Contact WHERE industryName = ? ORDER BY RAND() LIMIT 5";
-        Map<String, String> randomEntries = new HashMap<>();
 
-        jdbcTemplate.query(query, ps -> {
-            ps.setString(1, industryName);
-        }, (rs, rowNum) -> {
-            randomEntries.put(rs.getString("pageUrl"), rs.getString("pageTitle"));
-            return Collections.emptyMap();
-        });
-        return randomEntries;
-    }
+	private Map<String, String> fetchRandomEntries(String industryName) {
+		String query = "SELECT pageUrl, pageTitle FROM Contact WHERE industryName = ? ORDER BY RAND() LIMIT 5";
+		Map<String, String> randomEntries = new HashMap<>();
+
+		jdbcTemplate.query(query, ps -> {
+			ps.setString(1, industryName);
+		}, (rs, rowNum) -> {
+			randomEntries.put(rs.getString("pageUrl"), rs.getString("pageTitle"));
+			return Collections.emptyMap();
+		});
+		return randomEntries;
+	}
 	// =================================== Update Contact
 	// ====================================================================
 
@@ -497,7 +468,7 @@ public class DAOServiceImplementation implements DAOService {
 	public int updateContact(Contact contact, QuestionAnchor questionAnchor) {
 		int updateId = contact.getSno();
 		String sql = "UPDATE Contact SET Org_Full_Name = ?, Org_Short_Name = ?, pageUrl = ?, pageTitle = ?, Org_Icon = ?, About_Company = ?, "
-				+ "Address = ?, Web_Link = ?, Updated = ?, Updated_by = ?, industryName=? WHERE Entry_no = ?";
+				+ "Address = ?, Web_Link = ?, Updated = ?, Updated_by = ?, industryName = ? WHERE Entry_no = ?";
 		int result = 0;
 		if (contact.getDept_num() == null || contact.getAllFields() == null) {
 			return 0;
@@ -523,7 +494,6 @@ public class DAOServiceImplementation implements DAOService {
 		int num = updateNumbers(contact, result, updateId);
 		int qn_anchor = updateQuestionAnchor(questionAnchor, result, updateId);
 		int updateSocialLinks = updatesocialLinks(questionAnchor.getSocialLinkUpdate(), result, updateId);
-		// System.out.println("\nTotal: "+updateSocialLinks);
 		return num;
 	}
 
@@ -659,7 +629,7 @@ public class DAOServiceImplementation implements DAOService {
 
 	@Override
 	public List<Map<String, String>> showDB() {
-		//String sql = "SELECT * FROM Contact";
+		// String sql = "SELECT * FROM Contact";
 		String sql = "SELECT * FROM Contact ORDER BY Updated DESC";
 		List<Map<String, String>> list = new ArrayList<>();
 		try {
@@ -681,10 +651,11 @@ public class DAOServiceImplementation implements DAOService {
 		}
 		return list;
 	}
+
 	@Override
 	public List<Map<String, String>> showDB_ByOrder(String order) {
-		//String sql = "SELECT * FROM Contact";
-		String sql = "SELECT * FROM Contact "+order;
+		// String sql = "SELECT * FROM Contact";
+		String sql = "SELECT * FROM Contact " + order;
 		List<Map<String, String>> list = new ArrayList<>();
 		try {
 			jdbcTemplate.query(sql, new RowCallbackHandler() {
@@ -779,7 +750,7 @@ public class DAOServiceImplementation implements DAOService {
 	public Register findUserId(String uid) {
 		String sql = "SELECT * FROM Register Where Unique_id = ?";
 		boolean isValidEmail = uid.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
-		if(isValidEmail){
+		if (isValidEmail) {
 			return findUserEmail(uid);
 		}
 		try {
@@ -908,10 +879,9 @@ public class DAOServiceImplementation implements DAOService {
 				Map<String, Object> map = new HashMap<>();
 				map.put("Entry_no", rs.getInt("Entry_no"));
 				map.put("PageTitle", rs.getString("pageTitle"));
-				if(rs.getString("pageUrl") == null || rs.getString("pageUrl").trim().equals("")){
+				if (rs.getString("pageUrl") == null || rs.getString("pageUrl").trim().equals("")) {
 					map.put("isUrlAvailable", "class='disable-url'");
-				}
-				else{
+				} else {
 					map.put("isUrlAvailable", "");
 				}
 				map.put("pageUrl", rs.getString("pageUrl"));
@@ -925,9 +895,9 @@ public class DAOServiceImplementation implements DAOService {
 				sb.append(",");
 			}
 			int entryNo = (int) row.get("Entry_no");
-			String url = (String) row.get("pageUrl") == null? "":(String) row.get("pageUrl");
+			String url = (String) row.get("pageUrl") == null ? "" : (String) row.get("pageUrl");
 			// String pageLink = "/contact/" + url.toLowerCase();
-			String pageLink = (String) row.get("pageUrl") == null? "":"/contact/"+(String)row.get("pageUrl");
+			String pageLink = (String) row.get("pageUrl") == null ? "" : "/contact/" + (String) row.get("pageUrl");
 
 			sb.append("\"").append(entryNo).append("\":{");
 			sb.append("\"pageLink\":\"").append(pageLink).append("\",");
@@ -939,48 +909,20 @@ public class DAOServiceImplementation implements DAOService {
 		return sb.toString();
 	}
 
-	@Override
-	public List<Map<String, String>> sitemap() {
-		String sql = "SELECT Entry_no,Updated,Entry_Date FROM Contact";
-		List<Map<String, String>> list = new ArrayList<>();
-		try {
-			jdbcTemplate.query(sql, new RowCallbackHandler() {
-				@Override
-				public void processRow(ResultSet rs) throws SQLException {
-					Map<String, String> tempMap = new LinkedHashMap<>();
-					tempMap.put("Entry_no", rs.getString("Entry_no"));
-					String date = rs.getString("Updated") != null ? rs.getString("Updated")
-							: rs.getString("Entry_Date");
-					tempMap.put("updated", date);
-					list.add(tempMap);
-				}
-			});
-		} catch (Exception e) {
-			e.printStackTrace();
-			return Collections.emptyList();
-		}
-		return list;
-	}
-
 	// @Override
-	// public List<Map<String, String>> newSitemap() {
-	// String sql = "SELECT Entry_no, pageUrl, Updated, Entry_Date FROM Contact
-	// WHERE pageUrl != NULL";
+	// public List<Map<String, String>> sitemap() {
+	// String sql = "SELECT Entry_no,Updated,Entry_Date FROM Contact";
 	// List<Map<String, String>> list = new ArrayList<>();
 	// try {
 	// jdbcTemplate.query(sql, new RowCallbackHandler() {
 	// @Override
 	// public void processRow(ResultSet rs) throws SQLException {
-	// String pageUrl = rs.getString("pageUrl").trim();
-	// if (pageUrl != null && !pageUrl.equals("")) {
 	// Map<String, String> tempMap = new LinkedHashMap<>();
-	// tempMap.put("Entry_no", ("" + rs.getInt("Entry_no")).trim());
-	// tempMap.put("pageUrl", pageUrl);
+	// tempMap.put("Entry_no", rs.getString("Entry_no"));
 	// String date = rs.getString("Updated") != null ? rs.getString("Updated")
 	// : rs.getString("Entry_Date");
 	// tempMap.put("updated", date);
 	// list.add(tempMap);
-	// }
 	// }
 	// });
 	// } catch (Exception e) {
@@ -989,26 +931,7 @@ public class DAOServiceImplementation implements DAOService {
 	// }
 	// return list;
 	// }
-	// @Override
-	// public List<Map<String, String>> newSitemap() {
-	// String sql = "SELECT Entry_no, pageUrl, Updated, Entry_Date FROM Contact
-	// WHERE pageUrl IS NOT NULL";
-	// try {
-	// return jdbcTemplate.query(sql, (rs, rowNum) -> {
-	// String pageUrl = rs.getString("pageUrl").trim();
-	// Map<String, String> tempMap = new LinkedHashMap<>();
-	// tempMap.put("Entry_no", String.valueOf(rs.getInt("Entry_no")).trim());
-	// tempMap.put("pageUrl", pageUrl);
-	// String date = rs.getString("Updated") != null ? rs.getString("Updated") :
-	// rs.getString("Entry_Date");
-	// tempMap.put("updated", date);
-	// return tempMap;
-	// });
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// return Collections.emptyList();
-	// }
-	// }
+
 	@Override
 	public List<Map<String, String>> newSitemap() {
 		String sql = "SELECT Entry_no, pageUrl, Updated, Entry_Date FROM Contact WHERE pageUrl IS NOT NULL";
@@ -1044,163 +967,58 @@ public class DAOServiceImplementation implements DAOService {
 		return list;
 	}
 
-	/*
-	 * @Override
-	 * public int addSeo() {
-	 * int batchSize = 50; // Set batch size
-	 * int offset = 0;
-	 * int totalUpdated = 0;
-	 * 
-	 * String fetchQuery =
-	 * "SELECT Entry_no, Org_Full_Name,Org_Short_Name,Org_Other_Name FROM Contact LIMIT ? OFFSET ?"
-	 * ;
-	 * String updateQuery = "UPDATE Contact SET SeoKeywords = ? WHERE Entry_no = ?";
-	 * 
-	 * List<Map<String, Object>> rows;
-	 * do {
-	 * rows = jdbcTemplate.queryForList(fetchQuery, batchSize, offset);
-	 * 
-	 * for (Map<String, Object> row : rows) {
-	 * int id = (Integer)row.get("Entry_no");
-	 * 
-	 * String Org_Full_Name = cleanString((String) row.get("Org_Full_Name"));
-	 * String Org_Short_Name = cleanString((String) row.get("Org_Short_Name"));
-	 * String Org_Other_Name = cleanString((String) row.get("Org_Other_Name"));
-	 * 
-	 * String seoString = helper.SeoKeywords(Org_Full_Name, Org_Short_Name,
-	 * Org_Other_Name);
-	 * int rowsUpdated = jdbcTemplate.update(updateQuery, seoString, id);
-	 * totalUpdated += rowsUpdated;
-	 * }
-	 * 
-	 * offset += batchSize;
-	 * } while (!rows.isEmpty());
-	 * return totalUpdated;
-	 * }
-	 * 
-	 * 
-	 * @Override
-	 * public int addTitle() {
-	 * int batchSize = 50; // Set batch size
-	 * int offset = 0;
-	 * int totalUpdated = 0;
-	 * 
-	 * String fetchContactTable =
-	 * "SELECT Entry_no, Org_Short_Name FROM Contact LIMIT ? OFFSET ?";
-	 * String fetchContactNumberTable =
-	 * "SELECT PhoneEmail FROM ContactNumber WHERE Company_Id= ?";
-	 * String updatePageTitle =
-	 * "UPDATE Contact SET pageTitle = ? WHERE Entry_no = ?";
-	 * List<Map<String, Object>> rows;
-	 * do {
-	 * rows = jdbcTemplate.queryForList(fetchContactTable, batchSize, offset);
-	 * 
-	 * for (Map<String, Object> row : rows) {
-	 * int id = (Integer)row.get("Entry_no");
-	 * String sortName = cleanString((String) row.get("Org_Short_Name"));
-	 * List<String> nm = jdbcTemplate.queryForList(fetchContactNumberTable,
-	 * String.class, id);
-	 * 
-	 * 
-	 * String pageTitle = "Customer Care No.";
-	 * String firstNumber = "×××××...";
-	 * String patternString = "^[+\\d\\-\\s()\\.\\[\\]/,]+$";
-	 * Pattern pattern = Pattern.compile(patternString);
-	 * for(String phone: nm) {
-	 * Matcher matcher = pattern.matcher(phone);
-	 * if(matcher.find()) {
-	 * firstNumber = phone;
-	 * break;
-	 * }
-	 * }
-	 * 
-	 * if(totalUpdated <= 500) {
-	 * pageTitle = sortName+" Contact No. "+firstNumber;
-	 * }
-	 * else {
-	 * pageTitle = sortName+" Customer Care No. "+firstNumber;
-	 * }
-	 * 
-	 * int rowsUpdated = jdbcTemplate.update(updatePageTitle, pageTitle, id);
-	 * totalUpdated += rowsUpdated;
-	 * }
-	 * 
-	 * offset += batchSize;
-	 * } while (!rows.isEmpty());
-	 * return totalUpdated;
-	 * }
-	 * 
-	 * 
-	 * @Override
-	 * public int addDescription() {
-	 * int batchSize = 50; // Set batch size
-	 * int offset = 0;
-	 * int totalUpdated = 0;
-	 * 
-	 * String fetchContactTable =
-	 * "SELECT Entry_no, pageTitle FROM Contact LIMIT ? OFFSET ?";
-	 * String fetchContactNumberTable_nm =
-	 * "SELECT PhoneEmail FROM ContactNumber WHERE Company_Id= ?";
-	 * String fetchContactNumberTable_dept =
-	 * "SELECT department_name FROM ContactNumber WHERE Company_Id= ?";
-	 * String updatePageTitle =
-	 * "UPDATE Contact SET pageDesc = ? WHERE Entry_no = ?";
-	 * List<Map<String, Object>> rows;
-	 * do {
-	 * rows = jdbcTemplate.queryForList(fetchContactTable, batchSize, offset);
-	 * 
-	 * for (Map<String, Object> row : rows) {
-	 * int id = (Integer)row.get("Entry_no");
-	 * 
-	 * List<String> nm = jdbcTemplate.queryForList(fetchContactNumberTable_nm,
-	 * String.class, id);
-	 * List<String> dept = jdbcTemplate.queryForList(fetchContactNumberTable_dept,
-	 * String.class, id);
-	 * 
-	 * String pageDesc = "";
-	 * String patternString = "^[+\\d\\-\\s()\\.\\[\\]/,]+$";
-	 * Pattern pattern = Pattern.compile(patternString);
-	 * for(int i=0;i<nm.size();i++) {
-	 * Matcher matcher = pattern.matcher(nm.get(i));
-	 * if(matcher.find()) {
-	 * if(pageDesc.length() < 300) {
-	 * pageDesc = pageDesc+dept.get(i)+": "+nm.get(i)+", ";
-	 * }
-	 * else {
-	 * break;
-	 * }
-	 * }
-	 * }
-	 * if(pageDesc.length() < 300) {
-	 * for(int i=0;i<nm.size();i++) {
-	 * Matcher matcher = pattern.matcher(nm.get(i));
-	 * if(!matcher.find()) {
-	 * if(pageDesc.length() < 300) {
-	 * pageDesc = pageDesc+dept.get(i)+": "+nm.get(i)+" , ";
-	 * }
-	 * else {
-	 * break;
-	 * }
-	 * }
-	 * }
-	 * }
-	 * 
-	 * int rowsUpdated = jdbcTemplate.update(updatePageTitle, pageDesc, id);
-	 * totalUpdated += rowsUpdated;
-	 * }
-	 * 
-	 * offset += batchSize;
-	 * } while (!rows.isEmpty());
-	 * return totalUpdated;
-	 * }
-	 */
-	// public String cleanString(String input) {
-	// if (input == null) {
-	// return "";
-	// }
-	// // Remove commas and ensure one space between words
-	// return input.replaceAll(",", " ")
-	// .replaceAll("\\s{2,}", " "); // Replace multiple spaces with a single space
-	// }
+	@Override
+	public List<Map<String, String>> database(String order) {
+		String sql = "SELECT * FROM Contact " + order;
+		List<Map<String, String>> list = new ArrayList<>();
+		try {
+			jdbcTemplate.query(sql, new RowCallbackHandler() {
+				@Override
+				public void processRow(ResultSet rs) throws SQLException {
+					ResultSetMetaData rsmd = rs.getMetaData();
+					int columnCount = rsmd.getColumnCount();
+					Map<String, String> tempMap = new LinkedHashMap<>();
+					for (int i = 1; i <= columnCount; i++) {
+						tempMap.put(rsmd.getColumnName(i), rs.getString(i));
+					}
+					list.add(tempMap);
+				}
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Collections.emptyList();
+		}
+		return list;
+	}
+
+	@Override
+	public List<Map<String, String>> databaseSearch(String charct) {
+		String sql = "SELECT Entry_no, Org_Full_Name, Org_Short_Name, pageTitle, pageUrl, industryName, About_Company " +
+				"FROM Contact WHERE LOWER(Org_Full_Name) LIKE ? OR LOWER(Org_Short_Name) LIKE ? OR LOWER(pageTitle) LIKE ?";
+		String searchPattern = "%" + charct.toLowerCase() + "%";
+		List<Map<String, String>> resultList = jdbcTemplate.query(sql, new PreparedStatementSetter() {
+			@Override
+			public void setValues(PreparedStatement ps) throws SQLException {
+				ps.setString(1, searchPattern);
+				ps.setString(2, searchPattern);
+				ps.setString(3, searchPattern);
+			}
+		}, new RowMapper<Map<String, String>>() {
+			@Override
+			public Map<String, String> mapRow(ResultSet rs, int rowNum) throws SQLException {
+				Map<String, String> map = new HashMap<>();
+				map.put("Entry_no", ""+rs.getInt("Entry_no"));
+				//String pageUrl = "https://www.indiancarehub.com/contact/" + rs.getString("pageUrl") != null ? rs.getString("pageUrl") : "";
+				map.put("pageUrl", rs.getString("pageUrl"));
+				map.put("pageTitle", rs.getString("pageTitle"));
+				map.put("orgName", rs.getString("Org_Full_Name"));
+				map.put("industryName", rs.getString("industryName"));
+				map.put("aboutOrg", rs.getString("About_Company"));
+				return map;
+			}
+		});
+
+		return resultList;
+	}
 
 }

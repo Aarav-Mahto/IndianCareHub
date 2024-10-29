@@ -16,8 +16,6 @@ import com.contact.entity.Register;
 @Service
 public class JWTDAOClass implements UserDetailsService{
 
-	
-	
 	@Autowired
 	private DAOService daoService;
 	
